@@ -1,0 +1,18 @@
+navigate = "navigate"
+compare_text = "compare text"
+click = "click"
+get_text = "get text"
+hover = "hover"
+print_all_elements = "print all elements"
+print_step_description = "print step description"
+print_child_elements = "print child elements"
+refresh = "refresh"
+right_click = "right click"
+send_keys = "send keys"
+switch_to_window = "switch to window"
+take_screenshot = "take screenshot"
+wait = "wait"
+get_json_from_api = "get json from api"
+wait_for_element_presence = "wait for element presence"
+
+
