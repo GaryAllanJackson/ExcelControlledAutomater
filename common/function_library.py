@@ -99,6 +99,8 @@ class Functions:
         print(f"actual (get_text) = {actual}")
         if actual == "get_text":
             actual = self.get_element_text_silently(element)
+        elif actual == variables.get_current_url_in_action_method:
+            actual = self.driver.current_url
         self.log_equal_action("Send Keys", expected, actual, description)
         assert expected == actual, "Click Failed!"
 
@@ -247,14 +249,14 @@ class Functions:
         self.driver.switch_to.window(win_handle[int(index)])
         self.log_equal_action("Switch to Window", "n/a", "n/a", description)
 
-
-
-
     # Waits for an element to be clickable and returns that element to the calling method
     # placed in a try catch block to avoid returning the element if the wait expires before
     # the element is clickable
     def wait_for_element_to_be_clickable(self, selector_type, selector, wait_time, description):
         # wait = WebDriverWait(driver, 20)
+        print(f"Waiting {wait_time} seconds for element to be clickable.")
+        if wait_time == None:
+            wait_time = 20
         wait = WebDriverWait(self.driver, int(wait_time))
         try:
             if selector_type.lower() == "xpath":
@@ -272,8 +274,10 @@ class Functions:
             else:
                 wait.until(expected_conditions.element_to_be_clickable((By.NAME, selector)))
             element = self.get_element(selector_type, selector)
+            self.log_equal_action("Wait for clickable element", "n/a", "n/a", description)
         except:
             element = None
+            self.log_equal_action("Wait for clickable element", "n/a", "None", description)
         return element
 
     def get_json_from_api(self, api_url, description):
@@ -293,14 +297,11 @@ class Functions:
             print(fields_output)
         self.log_equal_action("Get JSON from API", "n/a", "n/a", description)
 
-
-
-    def log_equal_action(self, action, expected, actual, description):
+    def log_equal_action(self, action: str, expected: str, actual: str, description: str):
         workbook = openpyxl.load_workbook(self.log_file_name)
         sheet = workbook[self.log_sheet_name]
         # print_line(f"In log_equal_action workbook = {workbook.path}, sheet = {sheet.title}")
         status = "Fail"
-        # print(f"In log_equal_action action = {action},expected = {expected}, actual = {actual}, description = {description}")
         now = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
         if expected == actual:
             status = "Pass"

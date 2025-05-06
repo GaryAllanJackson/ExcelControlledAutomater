@@ -14,5 +14,6 @@ take_screenshot = "take screenshot"
 wait = "wait"
 get_json_from_api = "get json from api"
 wait_for_element_presence = "wait for element presence"
+wait_for_clickable_element = "wait for clickable element"
 
 

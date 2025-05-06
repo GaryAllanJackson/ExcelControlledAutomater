@@ -55,6 +55,8 @@ class AnyPage:
                 self.funct.presence_of_element_located(selector_type, selector, text_url, description)
             elif command.lower() == command_library.switch_to_window:
                 self.funct.switch_to_window(text_url, description)
+            elif command.lower() == command_library.wait_for_clickable_element:
+                self.funct.wait_for_element_to_be_clickable(selector_type, selector, text_url, description)
 
 
 
