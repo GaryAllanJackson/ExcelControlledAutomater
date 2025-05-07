@@ -410,8 +410,43 @@ class Functions:
         else:
             return desc_spaces
 
+    def get_all_element_xpath_values(self, accessor_type, accessor, file_name, description):
+        if ":" not in file_name and "data/" not in file_name:
+            file_name = "data/" + file_name
 
+        file = open(file_name, "w")
 
+        elements = self.get_elements(accessor_type, accessor)
+        for element in elements:
+            print(f"Tag_Name = {element.tag_name}")
+            file.write(f"Tag_Name = {element.tag_name}\r\n")
+            if element.get_attribute("id") is not None and len(element.get_attribute("id")) > 0:
+                print(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']")
+                file.write(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']\r\n")
+                print(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}")
+                file.write(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n")
+            elif element.get_attribute("class") is not None and len(element.get_attribute("class")) > 0:
+                print(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']")
+                file.write(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']\r\n")
+                print(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}")
+                file.write(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}\r\n")
+            else:
+                parent = element.find_element(By.XPATH, "..")
+                xpath_selector = element.tag_name
+                css_selector = element.tag_name
+                while parent is not None:
+                    xpath_selector = parent.tag_name + "/" + xpath_selector
+                    # css_selector = parent.tag_name + parent.get_attribute("class").replace(' ','.') + " > " + css_selector
+                    css_selector = parent.tag_name + " > " + css_selector
+                    if parent.tag_name == "html":
+                        break
+                    parent = parent.find_element(By.XPATH, "..")
+                    print(f"In process parent.tag_name = {parent.tag_name} and xpath_selector = {xpath_selector}")
+                xpath_selector = "//" + xpath_selector
+                print(f"XPath = {xpath_selector}")
+                file.write(f"XPath = {xpath_selector}\r\n")
+                print(f"Css_Selector = {css_selector}")
+                file.write(f"Css_Selector = {css_selector}\r\n")
 
 
     @staticmethod
