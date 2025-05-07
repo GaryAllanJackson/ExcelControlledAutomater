@@ -7,6 +7,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 import openpyxl
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from common import variables
@@ -206,6 +207,12 @@ class Functions:
         actions.move_to_element(element).perform()
         self.log_equal_action("Hover", "n/a", "n/a", description)
         self.perform_print("Hovering over element", description)
+
+    def select_dropdown_by_value(self, accessor_type, accessor, value, description):
+        dropdown = Select(self.get_element(accessor_type, accessor))
+        dropdown.select_by_value(value)
+        self.log_equal_action("Select Dropdown by value", "n/a", "n/a", description)
+
 
     def perform_screenshot(self, screenshot_file_name, description):
         file_saved = False
