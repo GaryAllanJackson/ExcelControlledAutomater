@@ -16,5 +16,6 @@ get_json_from_api = "get json from api"
 wait_for_element_presence = "wait for element presence"
 wait_for_clickable_element = "wait for clickable element"
 select_dropdown_by_value = "select dropdown by value"
+select_all_elements = "select all elements"
 
 

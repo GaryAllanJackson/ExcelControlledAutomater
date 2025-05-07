@@ -89,6 +89,22 @@ class Functions:
             print("-" * 50)
         self.log_equal_action("Print All Elements", "n/a", "n/a", description)
 
+    def perform_select_all_elements(self, accessor_type, accessor, description):
+        elements = self.get_elements(accessor_type, accessor)
+        elements_have_text = False
+        print("-" * 50)
+        print(f"Printing all elements based on: {accessor_type} = {accessor}")
+        for element in elements:
+            tag_name = element.tag_name
+            tag_text = self.get_element_text_silently(element)
+            element.click()
+            if len(tag_text) > 0:
+                print(f'Tag Name:{tag_name}: {tag_text}')
+                elements_have_text = True
+        if elements_have_text:
+            print("-" * 50)
+        self.log_equal_action("Select All Elements", "n/a", "n/a", description)
+
     def perform_page_refresh(self):
         self.driver.refresh()
         time.sleep(3)

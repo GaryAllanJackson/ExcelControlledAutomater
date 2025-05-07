@@ -59,6 +59,8 @@ class AnyPage:
                 self.funct.wait_for_element_to_be_clickable(selector_type, selector, text_url, description)
             elif command.lower() == command_library.select_dropdown_by_value:
                 self.funct.select_dropdown_by_value(selector_type, selector, text_url, description)
+            elif command.lower() == command_library.select_all_elements:
+                self.funct.perform_select_all_elements(selector_type, selector, description)
 
 
 
