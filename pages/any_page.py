@@ -62,7 +62,7 @@ class AnyPage:
                 self.funct.select_dropdown_by_value(selector_type, selector, text_url, description)
             elif command.lower() == command_library.select_all_elements:
                 self.funct.perform_select_all_elements(selector_type, selector, description)
-            elif command.lower() == command_library.get_all_element_xpath_values:
+            elif command.lower() == command_library.get_all_xpath_and_css_selectors:
                 self.funct.get_all_element_xpath_values(selector_type, selector, text_url, description)
 
 

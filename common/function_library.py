@@ -427,8 +427,8 @@ class Functions:
                 file.write(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n")
                 status = True
             elif element.get_attribute("class") is not None and len(element.get_attribute("class")) > 0:
-                print(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']")
-                file.write(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']\r\n")
+                print(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']")
+                file.write(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']\r\n")
                 print(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}")
                 file.write(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}\r\n")
                 status = True
