@@ -64,6 +64,8 @@ class AnyPage:
                 self.funct.perform_select_all_elements(selector_type, selector, description)
             elif command.lower() == command_library.get_all_xpath_and_css_selectors:
                 self.funct.get_all_element_xpath_values(selector_type, selector, text_url, description)
+            elif command.lower() == command_library.get_table_information:
+                self.funct.get_table_information(selector_type, selector, text_url, description)
 
 
 

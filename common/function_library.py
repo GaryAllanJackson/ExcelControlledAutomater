@@ -452,6 +452,20 @@ class Functions:
                 status = True
         self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
 
+    def get_table_information(self, accessor_type, accessor, file_name, description):
+        table = self.get_element(accessor_type, accessor)
+        table_rows = table.find_elements(By.TAG_NAME, "tr")
+        table_headers = ""
+        for tr in table_rows:
+            if table_headers == "":
+                table_headers = tr.find_elements(By.TAG_NAME, "th")
+                for th in table_headers:
+                    print(th.text)
+            table_cells = tr.find_elements(By.TAG_NAME, "td")
+            for td in table_cells:
+                print(td.text)
+        self.log_equal_action("Get Table Information", "n/a", "n/a", description)
+
 
     @staticmethod
     def print_headers(sheet):
