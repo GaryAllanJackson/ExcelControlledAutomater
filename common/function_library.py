@@ -415,21 +415,23 @@ class Functions:
             file_name = "data/" + file_name
 
         file = open(file_name, "w")
-
+        status = False
         elements = self.get_elements(accessor_type, accessor)
         for element in elements:
-            print(f"Tag_Name = {element.tag_name}")
+            print(f"\nTag_Name = {element.tag_name}")
             file.write(f"Tag_Name = {element.tag_name}\r\n")
             if element.get_attribute("id") is not None and len(element.get_attribute("id")) > 0:
                 print(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']")
                 file.write(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']\r\n")
                 print(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}")
                 file.write(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n")
+                status = True
             elif element.get_attribute("class") is not None and len(element.get_attribute("class")) > 0:
                 print(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']")
                 file.write(f"XPath = //{element.tag_name}[class='{element.get_attribute("class").replace(' ','.')}']\r\n")
                 print(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}")
                 file.write(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}\r\n")
+                status = True
             else:
                 parent = element.find_element(By.XPATH, "..")
                 xpath_selector = element.tag_name
@@ -447,6 +449,8 @@ class Functions:
                 file.write(f"XPath = {xpath_selector}\r\n")
                 print(f"Css_Selector = {css_selector}")
                 file.write(f"Css_Selector = {css_selector}\r\n")
+                status = True
+        self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
 
 
     @staticmethod

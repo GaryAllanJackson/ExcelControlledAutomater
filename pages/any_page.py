@@ -12,7 +12,8 @@ class AnyPage:
         print("=" * 30 + "[ Start Commands Listing ]" + "=" * 30)
         print("Commands List Loaded! length = ", len(command_list) )
         for command, selector_type, selector, text_url, expected, actual, description in command_list:
-            print(f"Command = {command} - Selector_Type = {selector_type} - Selector = '{selector}'" )
+            print(f"Command = {command} - Selector_Type = {selector_type} - Selector = '{selector}' - Description = {description}" )
+
         print("=" * 30 + "[ End Commands Listing ]" + "=" * 30)
         print("\n\n")
         for command, selector_type, selector, text_url, expected, actual, description in command_list:
