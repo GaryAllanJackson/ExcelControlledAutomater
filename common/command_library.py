@@ -19,5 +19,7 @@ select_dropdown_by_value = "select dropdown by value"
 select_all_elements = "select all elements"
 get_all_xpath_and_css_selectors = "get all xpath and css selectors"
 get_table_information = "get table information"
+save_har_file = "save har file"
+save_complete_har_file = "save complete har file"
 
 

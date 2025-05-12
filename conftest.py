@@ -1,7 +1,8 @@
 import pytest
 from selenium import webdriver
 from common.function_library import Functions
-from common import variables
+
+
 
 
 @pytest.fixture()
@@ -24,6 +25,10 @@ def get_chrome_options():
 
 def close_driver(driver):
     funct = Functions(driver)
+    has_save_complete = funct.check_save_complete_har_file()
+    # print(f"has_save_complete = {has_save_complete}")
+    if not has_save_complete:
+        funct.get_har_file_for_tag_information()
     funct.log_equal_action("Close Driver", "n/a", "n/a", "Closing Driver")
     driver.quit()
     print("\nDriver closed")

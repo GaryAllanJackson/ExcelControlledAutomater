@@ -1,5 +1,7 @@
-import datetime
+import os
+from datetime import datetime
 import time
+from urllib.parse import urlparse, parse_qs
 
 import pyautogui
 import requests
@@ -10,7 +12,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from common import variables
+from common import variables, command_library
 
 
 class Functions:
@@ -22,11 +24,17 @@ class Functions:
         self.command_file = variables.command_file_name
         self.command_sheet = variables.command_sheet_name
         self.data = []
+        self.har_file_name = ""
+        self.har_file_contents = ""
+        self.has_save_complete = False
 
     def navigate(self, page_url, description):
+        if variables.unsecure_protocol in self.driver.current_url or variables.secure_protocol in self.driver.current_url:
+            self.get_har_file_for_tag_information()
         self.driver.get(page_url)
         time.sleep(3)
         self.log_equal_action("navigate", page_url, self.driver.current_url, description)
+
         assert page_url == self.driver.current_url, "Navigation Failed!"
 
     def perform_click(self, accessor_type, accessor, expected, actual, description):
@@ -240,7 +248,7 @@ class Functions:
             print(e)
             self.driver.save_screenshot("screenshots/" + screenshot_file_name)
             file_saved = True
-        self.log_equal_action("Take Screenshot", True,file_saved,description)
+        self.log_equal_action("Take Screenshot", "True", str(file_saved),description)
 
     def perform_wait(self, text_url, description):
         time.sleep(int(text_url))
@@ -265,7 +273,7 @@ class Functions:
             wait.until(expected_conditions.presence_of_element_located((By.NAME, selector)))
         element = self.get_element(selector_type, selector)
         element_found = element is not None
-        self.log_equal_action("Wait for Element Presence", True, element_found, description)
+        self.log_equal_action("Wait for Element Presence", "True", str(element_found), description)
 
     def switch_to_window(self, index, description):
         win_handle = self.driver.window_handles
@@ -320,12 +328,12 @@ class Functions:
             print(fields_output)
         self.log_equal_action("Get JSON from API", "n/a", "n/a", description)
 
-    def log_equal_action(self, action: str, expected: str, actual: str, description: str):
+    def log_equal_action(self, action: str, expected: str, actual: str, description: str) -> None:
         workbook = openpyxl.load_workbook(self.log_file_name)
         sheet = workbook[self.log_sheet_name]
         # print_line(f"In log_equal_action workbook = {workbook.path}, sheet = {sheet.title}")
         status = "Fail"
-        now = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+        now = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
         if expected == actual:
             status = "Pass"
         row = self.find_first_empty_row()
@@ -359,7 +367,7 @@ class Functions:
     def log_contains_action(self, action, expected, actual, description):
         workbook = openpyxl.load_workbook(self.log_file_name)
         sheet = workbook[self.log_sheet_name]
-        now = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+        now = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
         status = self.get_status_contains(expected, actual)
         row = self.find_first_empty_row()
         if row == 1:
@@ -390,7 +398,7 @@ class Functions:
         print(f"Action: {action}\t|\tDescription:{description}\t|\tStatus:{status}")
 
     # This method finds the first empty row in the Excel Spreadsheet
-    def find_first_empty_row(self):
+    def find_first_empty_row(self) -> int:
         workbook = openpyxl.load_workbook(self.log_file_name)
         sheet = workbook[self.log_sheet_name]
         row = 1
@@ -411,8 +419,8 @@ class Functions:
             return desc_spaces
 
     def get_all_element_xpath_values(self, accessor_type, accessor, file_name, description):
-        if ":" not in file_name and "data/" not in file_name:
-            file_name = "data/" + file_name
+        if ":" not in file_name and "selector_files/" not in file_name:
+            file_name = "selector_files/" + file_name
 
         file = open(file_name, "w")
         status = False
@@ -466,6 +474,122 @@ class Functions:
                 print(td.text)
         self.log_equal_action("Get Table Information", "n/a", "n/a", description)
 
+    def get_har_file_for_tag_information(self) -> None:
+        # print("In get_har_file_for_tag_information")
+        java_script_command = "const resources = performance.getEntriesByType('resource');\n"
+        java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"
+        java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
+        java_script_command = java_script_command + "});\nreturn returnValue;"
+        status = False
+        description = "Unsolicited HAR retrieval for tagging information"
+        har_content = str(self.driver.execute_script(java_script_command))
+        self.har_file_contents = self.har_file_contents + har_content
+        if har_content is not None and len(har_content) > 0:
+            # print(f"har_content written to ({file_name}).\r\n{har_content}")
+            # print(f"har_content written to ({file_name}).\r\n")
+            status = True
+            if not self.check_save_complete_har_file():
+                self.get_ga4_analytics_tags(har_content, "")
+        self.log_equal_action("Get HAR for tag information.", str(True), str(status), description)
+
+    def save_complete_har_file(self, file_name:str = None, description:str = None) -> None:
+        java_script_command = "const resources = performance.getEntriesByType('resource');\n"
+        java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"
+        java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
+        java_script_command = java_script_command + "});\nreturn returnValue;"
+        status = False
+        # If the har_file_name is blank, it is the first time through so delete the old file
+        # for subsequent saves, just append to the existing file
+        if self.har_file_name == "" or self.har_file_name is None:
+            exists = self.delete_file(file_name)
+            self.har_file_name = file_name
+
+        har_content = str(self.driver.execute_script(java_script_command))
+        self.har_file_contents = self.har_file_contents + har_content
+        if self.har_file_contents is not None and len(self.har_file_contents) > 0:
+            # if no file_name is passed in, create one
+            if file_name is None or len(file_name) <= 0:
+                now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
+                file_name = "har_file" + now + ".txt"
+            # If file_name not being set to specific file location and doesn't include the data folder
+            # add the data folder, otherwise leave the file_name alone.
+            if ":" not in file_name and "har_files/" not in file_name:
+                file_name = "har_files/" + file_name
+                file = open(file_name, "a")
+                file.write(self.har_file_contents)
+                # print(f"har_content written to ({file_name}).\r\n{har_content}")
+                print(f"har_content written to ({file_name}).\r\n")
+                status = True
+            self.get_ga4_analytics_tags(self.har_file_contents, file_name)
+        self.log_equal_action("Save HAR file", str(True), str(status), description)
+
+
+    def save_har_file(self, file_name:str = None, description:str = None) -> None:
+        java_script_command = "const resources = performance.getEntriesByType('resource');\n"
+        java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"
+        java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
+        java_script_command = java_script_command + "});\nreturn returnValue;"
+        status = False
+        # If the har_file_name is blank, it is the first time through so delete the old file
+        # for subsequent saves, just append to the existing file
+        if self.har_file_name == "" or self.har_file_name is None:
+            exists = self.delete_file(file_name)
+            self.har_file_name = file_name
+
+        har_content = str(self.driver.execute_script(java_script_command))
+
+        if har_content is not None and len(har_content) > 0:
+            # if no file_name is passed in, create one
+            if file_name is None or len(file_name) <= 0:
+                now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
+                file_name = "har_file" + now + ".txt"
+            # If file_name not being set to specific file location and doesn't include the data folder
+            # add the data folder, otherwise leave the file_name alone.
+            if ":" not in file_name and "har_files/" not in file_name:
+                file_name = "har_files/" + file_name
+                file = open(file_name, "a")
+                file.write(har_content)
+                # print(f"har_content written to ({file_name}).\r\n{har_content}")
+                print(f"har_content written to ({file_name}).\r\n")
+                status = True
+            self.get_ga4_analytics_tags(har_content, file_name)
+        self.log_equal_action("Save HAR file", str(True), str(status), description)
+
+    def get_ga4_analytics_tags(self, har_content:str, file_name:str) -> None:
+        status = False
+        description = "Check for GA4 Analytics Tags"
+        file_name = file_name.replace(".", "_GA4_Tags.")
+        if variables.ga4_analytics_identifier in har_content and variables.google_analytics_identifier in har_content:
+            # if self.has_save_complete:
+            print("GA4 Analytics Tags Found!")
+            ar_har_content = har_content.split("\n")
+            for har_entry in ar_har_content:
+                if variables.ga4_analytics_identifier in har_entry:
+                    ar_har_values = urlparse(har_entry)
+                    params = parse_qs(ar_har_values.query)
+                    event_name = params.get("en", [None])[0]
+                    document_location = params.get("dl", [None])[0]
+                    hit_type = params.get("t", [None])[0]
+                    tracking_id = params.get("tid", [None])[0]
+                    # if tracking_id is not None and event_name is not None:
+                    if tracking_id is not None:
+                        print(f"Tracking Id:{tracking_id} - Event Name: {event_name} - Hit Type:{hit_type} - Document Location:{document_location}")
+                    status = True
+        else:
+            print("No GA4 Analytics Tags Found")
+        self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
+
+
+    def delete_file(self, file_name) -> bool:
+        if os.path.exists(file_name):
+            os.remove(file_name)
+            print("File deleted.")
+            return True
+        else:
+            print("File does not exist.")
+            return False
+
+
 
     @staticmethod
     def print_headers(sheet):
@@ -505,8 +629,9 @@ class Functions:
         else:
             return "Fail"
 
-    def read_excel_command_file(self):
-        print(f"Reading Commands File:{self.command_file}")
+    def read_excel_command_file(self, verbose = True):
+        if verbose:
+            print(f"Reading Commands File:{self.command_file}")
         workbook = openpyxl.load_workbook(self.command_file)
         sheet = workbook[self.command_sheet]
         self.data = []
@@ -521,5 +646,14 @@ class Functions:
             self.data.append((command, selector_type, selector, text_url, expected, actual, description))
         return self.data
 
+    # Checks if there is a Save complete har file command, if found returns True, else False
+    def check_save_complete_har_file(self):
+        self.has_save_complete = False
+        command_list = self.read_excel_command_file(False)
+        for command, selector_type, selector, text_url, expected, actual, description in command_list:
+            if command.lower() == command_library.save_complete_har_file:
+                has_save_complete = True
+                break
 
+        return self.has_save_complete
 

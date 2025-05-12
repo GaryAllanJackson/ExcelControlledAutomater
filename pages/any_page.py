@@ -1,22 +1,27 @@
 from common.function_library import Functions
 from common import command_library
 
+
+
 class AnyPage:
 
     def __init__(self, driver):
+        self.command_list = None
         self.driver = driver
         self.funct = Functions(self.driver)
 
+
+
     def any_page(self):
-        command_list = self.funct.read_excel_command_file()
+        self.command_list = self.funct.read_excel_command_file()
         print("=" * 30 + "[ Start Commands Listing ]" + "=" * 30)
-        print("Commands List Loaded! length = ", len(command_list) )
-        for command, selector_type, selector, text_url, expected, actual, description in command_list:
+        print("Commands List Loaded! length = ", len(self.command_list))
+        for command, selector_type, selector, text_url, expected, actual, description in self.command_list:
             print(f"Command = {command} - Selector_Type = {selector_type} - Selector = '{selector}' - Description = {description}" )
 
         print("=" * 30 + "[ End Commands Listing ]" + "=" * 30)
         print("\n\n")
-        for command, selector_type, selector, text_url, expected, actual, description in command_list:
+        for command, selector_type, selector, text_url, expected, actual, description in self.command_list:
             # print(f"Command = {command} - actual = {actual}")
             if command.lower() == "command":
                 pass
@@ -25,7 +30,7 @@ class AnyPage:
             elif command.lower() == command_library.click:
                 self.funct.perform_click(selector_type, selector, expected, actual, description)
             elif command.lower() == command_library.compare_text:
-                if self.funct.saved_text != None and len(self.funct.saved_text) > 0:
+                if self.funct.saved_text is not None and len(self.funct.saved_text) > 0:
                     self.funct.compare_element_text_to_saved_text(selector_type, selector, actual, expected, description)
                 else:
                     print("The Compare Text action requires a prior Get Text action!")
@@ -66,6 +71,11 @@ class AnyPage:
                 self.funct.get_all_element_xpath_values(selector_type, selector, text_url, description)
             elif command.lower() == command_library.get_table_information:
                 self.funct.get_table_information(selector_type, selector, text_url, description)
+            elif command.lower() == command_library.save_har_file:
+                self.funct.save_har_file(text_url, description)
+            elif command.lower() == command_library.save_complete_har_file:
+                self.funct.save_complete_har_file(text_url, description)
+                has_save_complete = True
 
 
 
