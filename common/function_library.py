@@ -418,6 +418,9 @@ class Functions:
         else:
             return desc_spaces
 
+    # This method gets the xPath and Css Selector values for all elements matching the
+    # accessor_type and accessor combination and supplies the tag_name to help with
+    # referencing the item.
     def get_all_element_xpath_values(self, accessor_type, accessor, file_name, description):
         if ":" not in file_name and "selector_files/" not in file_name:
             file_name = "selector_files/" + file_name
@@ -460,18 +463,64 @@ class Functions:
                 status = True
         self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
 
-    def get_table_information(self, accessor_type, accessor, file_name, description):
+    # This method prints all table information based on the accessor_type and accessor
+    # def get_table_information(self, accessor_type, accessor, file_name, description):
+    def get_table_information(self, accessor_type, accessor, display_orientation, description):
+        if len(display_orientation) <= 0:
+            display_orientation = "vertical"
         table = self.get_element(accessor_type, accessor)
         table_rows = table.find_elements(By.TAG_NAME, "tr")
         table_headers = ""
+        row_data = ""
         for tr in table_rows:
             if table_headers == "":
                 table_headers = tr.find_elements(By.TAG_NAME, "th")
                 for th in table_headers:
-                    print(th.text)
+                    if display_orientation == "vertical":
+                        print(th.text)
+                    else:
+                        row_data = row_data + th.text + "\t| "
+                if len(row_data) > 0:
+                    print(row_data)
             table_cells = tr.find_elements(By.TAG_NAME, "td")
+            row_data = ""
             for td in table_cells:
-                print(td.text)
+                if display_orientation == "vertical":
+                    print(td.text)
+                else:
+                    row_data = row_data + td.text + "\t| "
+            if len(row_data) > 0:
+                print(row_data)
+        self.log_equal_action("Get Table Information", "n/a", "n/a", description)
+
+    def get_table_information_alt(self, accessor_type, accessor, display_orientation, max_space_str, description):
+        if len(display_orientation) <= 0:
+            display_orientation = "vertical"
+        table = self.get_element(accessor_type, accessor)
+        table_rows = table.find_elements(By.TAG_NAME, "tr")
+        table_headers = ""
+        row_data = ""
+        max_space = int(max_space_str)
+        for tr in table_rows:
+            if table_headers == "":
+                table_headers = tr.find_elements(By.TAG_NAME, "th")
+                for th in table_headers:
+                    if display_orientation == "vertical":
+                        print(th.text)
+                    else:
+                        row_data = row_data + th.text + ("." * (max_space - len(th.text)))  + "\t| "
+                if len(row_data) > 0:
+                    print(row_data)
+            table_cells = tr.find_elements(By.TAG_NAME, "td")
+            row_data = ""
+            for td in table_cells:
+                if display_orientation == "vertical":
+                    print(td.text)
+                else:
+                    row_data = row_data + td.text + ("." * (max_space - len(td.text))) + "\t| "
+
+            if len(row_data) > 0:
+                print(row_data)
         self.log_equal_action("Get Table Information", "n/a", "n/a", description)
 
     def get_har_file_for_tag_information(self) -> None:
@@ -523,7 +572,8 @@ class Functions:
             self.get_ga4_analytics_tags(self.har_file_contents, file_name)
         self.log_equal_action("Save HAR file", str(True), str(status), description)
 
-
+    # Thinking of removing this method and just keeping the save_complete_har_file
+    # in which I can add the page url at the top of the file to delineate between different URLs
     def save_har_file(self, file_name:str = None, description:str = None) -> None:
         java_script_command = "const resources = performance.getEntriesByType('resource');\n"
         java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"

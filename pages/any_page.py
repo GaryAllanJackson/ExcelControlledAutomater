@@ -70,7 +70,10 @@ class AnyPage:
             elif command.lower() == command_library.get_all_xpath_and_css_selectors:
                 self.funct.get_all_element_xpath_values(selector_type, selector, text_url, description)
             elif command.lower() == command_library.get_table_information:
-                self.funct.get_table_information(selector_type, selector, text_url, description)
+                if expected is not None and len(expected) > 0 and int(expected) > 0:
+                    self.funct.get_table_information_alt(selector_type, selector, text_url, expected, description)
+                else:
+                    self.funct.get_table_information(selector_type, selector, text_url, description)
             elif command.lower() == command_library.save_har_file:
                 self.funct.save_har_file(text_url, description)
             elif command.lower() == command_library.save_complete_har_file:
