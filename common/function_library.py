@@ -421,11 +421,14 @@ class Functions:
     # This method gets the xPath and Css Selector values for all elements matching the
     # accessor_type and accessor combination and supplies the tag_name to help with
     # referencing the item.
-    def get_all_element_xpath_values(self, accessor_type, accessor, file_name, description):
+    def get_all_element_xpath_css_values(self, accessor_type:str, accessor:str, file_name:str, description:str) -> None:
         if ":" not in file_name and "selector_files/" not in file_name:
             file_name = "selector_files/" + file_name
-
         file = open(file_name, "w")
+        file.write(f"The xPath and Css Selectors are for URL: {self.driver.current_url}\r\n")
+        file.write(f"Selector Type: {accessor_type} - Selector: {accessor}\r\n")
+        file.write("-" * 80)
+        file.write(f"\r\n")
         status = False
         elements = self.get_elements(accessor_type, accessor)
         for element in elements:
@@ -463,9 +466,11 @@ class Functions:
                 status = True
         self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
 
-    # This method prints all table information based on the accessor_type and accessor
+    # This method prints all table information based on the accessor_type and accessor, but
+    # can also change the display orientation based on the text/URL value.
+    # The default orientation is vertical.
     # def get_table_information(self, accessor_type, accessor, file_name, description):
-    def get_table_information(self, accessor_type, accessor, display_orientation, description):
+    def get_table_information(self, accessor_type:str, accessor:str, display_orientation:str, description:str) -> None:
         if len(display_orientation) <= 0:
             display_orientation = "vertical"
         table = self.get_element(accessor_type, accessor)
@@ -493,6 +498,11 @@ class Functions:
                 print(row_data)
         self.log_equal_action("Get Table Information", "n/a", "n/a", description)
 
+    # This method prints all table information based on the accessor_type and accessor, but
+    # can also change the display orientation based on the text/URL value.
+    # The default orientation is vertical.
+    # This method also allows the test to specify the minimum space each column should
+    # take up, using the Expected value, so that the output aligns like a table should.
     def get_table_information_alt(self, accessor_type, accessor, display_orientation, max_space_str, description):
         if len(display_orientation) <= 0:
             display_orientation = "vertical"
@@ -523,8 +533,9 @@ class Functions:
                 print(row_data)
         self.log_equal_action("Get Table Information", "n/a", "n/a", description)
 
+    # This method saves each page's HAR file to the global har contents variable
+    # so that tag information can be extracted at a later time.
     def get_har_file_for_tag_information(self) -> None:
-        # print("In get_har_file_for_tag_information")
         java_script_command = "const resources = performance.getEntriesByType('resource');\n"
         java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"
         java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
@@ -532,11 +543,12 @@ class Functions:
         status = False
         description = "Unsolicited HAR retrieval for tagging information"
         har_content = str(self.driver.execute_script(java_script_command))
-        self.har_file_contents = self.har_file_contents + har_content
         if har_content is not None and len(har_content) > 0:
-            # print(f"har_content written to ({file_name}).\r\n{har_content}")
-            # print(f"har_content written to ({file_name}).\r\n")
+            # save all har file content to the class level variable
+            self.har_file_contents = self.har_file_contents + har_content
             status = True
+            # If this doesn't have a save complete har file among the commands,
+            # get the GA4 tags in the har content
             if not self.check_save_complete_har_file():
                 self.get_ga4_analytics_tags(har_content, "")
         self.log_equal_action("Get HAR for tag information.", str(True), str(status), description)
@@ -629,7 +641,7 @@ class Functions:
             print("No GA4 Analytics Tags Found")
         self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
 
-
+    # This method deletes the file based on the file_name parameter passed in
     def delete_file(self, file_name) -> bool:
         if os.path.exists(file_name):
             os.remove(file_name)
@@ -707,3 +719,22 @@ class Functions:
 
         return self.has_save_complete
 
+    # This is the way you get the second highest number from an Array of numbers.
+    # First, get a unique set of numbers, the set function does this.
+    # Next, sort the unique numbers from lowest to highest,
+    # Then place them in reverse order so they are highest to lowest.
+    # Check to ensure that more than 1 number is in the list otherwise, only the highest is remaining.
+    # Finally, get the second item from the array or list and that is the second-highest number.
+    def get_second_highest_number_from_array(self):
+        numbers = [10, 20, 40, 20, 50, 40, 50]
+
+        # Remove duplicates and sort in descending order
+        unique_numbers = sorted(set(numbers), reverse=True)
+        print("unique_numbers = ", unique_numbers)
+
+        # Check that there are at least 2 unique numbers
+        if len(unique_numbers) >= 2:
+            second_highest = unique_numbers[1]
+            print("Second highest number is:", second_highest)
+        else:
+            print("Not enough unique numbers to determine second highest.")

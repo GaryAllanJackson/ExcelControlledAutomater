@@ -13,6 +13,8 @@ class AnyPage:
 
 
     def any_page(self):
+        # self.funct.get_second_highest_number_from_array()
+        # return
         self.command_list = self.funct.read_excel_command_file()
         print("=" * 30 + "[ Start Commands Listing ]" + "=" * 30)
         print("Commands List Loaded! length = ", len(self.command_list))
@@ -68,7 +70,7 @@ class AnyPage:
             elif command.lower() == command_library.select_all_elements:
                 self.funct.perform_select_all_elements(selector_type, selector, description)
             elif command.lower() == command_library.get_all_xpath_and_css_selectors:
-                self.funct.get_all_element_xpath_values(selector_type, selector, text_url, description)
+                self.funct.get_all_element_xpath_css_values(selector_type, selector, text_url, description)
             elif command.lower() == command_library.get_table_information:
                 if expected is not None and len(expected) > 0 and int(expected) > 0:
                     self.funct.get_table_information_alt(selector_type, selector, text_url, expected, description)
