@@ -431,18 +431,25 @@ class Functions:
         file.write(f"\r\n")
         status = False
         elements = self.get_elements(accessor_type, accessor)
+        xpath = ""
         for element in elements:
             print(f"\nTag_Name = {element.tag_name}")
             file.write(f"Tag_Name = {element.tag_name}\r\n")
             if element.get_attribute("id") is not None and len(element.get_attribute("id")) > 0:
+                xpath = f"XPath = //{element.tag_name}" + "[@id='" + element.get_attribute("id") + "']"
+                print(f"xPath variable: {xpath}")
                 print(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']")
-                file.write(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']\r\n")
-                print(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}")
-                file.write(f"Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n")
+                # file.write(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']\r\n")
+                file.write(f"{xpath}\r\n")
+                print(f'Css_Selector = {element.tag_name}#{element.get_attribute("id")}')
+                file.write(f'Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n')
                 status = True
             elif element.get_attribute("class") is not None and len(element.get_attribute("class")) > 0:
+                xpath = f"XPath = //{element.tag_name}" + "[@class='" + element.get_attribute("class") + "']"
+                print(f"xPath variable: {xpath}")
                 print(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']")
-                file.write(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']\r\n")
+                file.write(f"{xpath}\r\n")
+                # file.write(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']\r\n")
                 print(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}")
                 file.write(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}\r\n")
                 status = True
@@ -457,7 +464,7 @@ class Functions:
                     if parent.tag_name == "html":
                         break
                     parent = parent.find_element(By.XPATH, "..")
-                    print(f"In process parent.tag_name = {parent.tag_name} and xpath_selector = {xpath_selector}")
+                    # print(f"In process parent.tag_name = {parent.tag_name} and xpath_selector = {xpath_selector}")
                 xpath_selector = "//" + xpath_selector
                 print(f"XPath = {xpath_selector}")
                 file.write(f"XPath = {xpath_selector}\r\n")
@@ -719,7 +726,7 @@ class Functions:
 
         return self.has_save_complete
 
-    # This is the way you get the second highest number from an Array of numbers.
+    # This is the way you get the second-highest number from an Array of numbers.
     # First, get a unique set of numbers, the set function does this.
     # Next, sort the unique numbers from lowest to highest,
     # Then place them in reverse order so they are highest to lowest.
