@@ -9,3 +9,4 @@ ga4_analytics_identifier = "collect?"  #"collect?v=2"
 google_analytics_identifier = "www.google-analytics.com/"
 unsecure_protocol = "http://"
 secure_protocol = "https://"
+dash_length = 120

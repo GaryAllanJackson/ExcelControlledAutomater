@@ -1,6 +1,6 @@
 The xPath and Css Selectors are for URL: https://selectorshub.com/xpath-practice-page/
 Selector Type: css_selector - Selector: a
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 Tag_Name = a
 XPath = //html/body/div/header/p/a
 Css_Selector = html > body > div > header > p > a

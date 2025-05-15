@@ -66,8 +66,8 @@ class Functions:
 
     def perform_print_sub_elements(self, accessor_type, accessor, description):
         elements = self.get_elements(accessor_type, accessor)
-        elements_have_text = False
-        print("-" * 80)
+        # elements_have_text = False
+        print("-" * variables.dash_length)
         print(f"Printing all child elements based on: {accessor_type} = {accessor}")
         for element in elements:
             elements_have_text = False
@@ -79,13 +79,13 @@ class Functions:
                     print(f'Tag Name:{tag_name}: {tag_text}')
                     elements_have_text = True
             if elements_have_text:
-                print("-"*80)
+                print("-"*variables.dash_length)
         self.log_equal_action("Print Child Elements", "n/a", "n/a", description)
 
     def perform_print_all_elements(self, accessor_type, accessor, description):
         elements = self.get_elements(accessor_type, accessor)
         elements_have_text = False
-        print("-" * 50)
+        print("-" * variables.dash_length)
         print(f"Printing all elements based on: {accessor_type} = {accessor}")
         for element in elements:
             tag_name = element.tag_name
@@ -94,13 +94,13 @@ class Functions:
                 print(f'Tag Name:{tag_name}: {tag_text}')
                 elements_have_text = True
         if elements_have_text:
-            print("-" * 50)
+            print("-" * variables.dash_length)
         self.log_equal_action("Print All Elements", "n/a", "n/a", description)
 
     def perform_select_all_elements(self, accessor_type, accessor, description):
         elements = self.get_elements(accessor_type, accessor)
         elements_have_text = False
-        print("-" * 50)
+        print("-" * variables.dash_length)
         print(f"Printing all elements based on: {accessor_type} = {accessor}")
         for element in elements:
             tag_name = element.tag_name
@@ -110,7 +110,7 @@ class Functions:
                 print(f'Tag Name:{tag_name}: {tag_text}')
                 elements_have_text = True
         if elements_have_text:
-            print("-" * 50)
+            print("-" * variables.dash_length)
         self.log_equal_action("Select All Elements", "n/a", "n/a", description)
 
     def perform_page_refresh(self):
@@ -167,18 +167,16 @@ class Functions:
 
     def get_element_text(self, accessor_type, accessor, expected, description):
         element = self.get_element(accessor_type, accessor)
-        # print("Retrieving text for element: ", element.get_attribute("outerHTML"))
         el_html = element.get_attribute("outerHTML")
-        return_value = ""
         if el_html.find("<input") > -1:
             return_value = element.get_attribute("value")
         else:
             try:
                 return_value = element.text
-            except:
+            except ValueError:
                 return_value = element.get_attribute("innerText")
 
-        actual = return_value
+        actual = return_value if return_value is not None else ""
         print(f"Get Text - Expected:{expected} - Actual:{actual}")
         self.log_equal_action("Get Text", expected, actual, description)
         # Save the value into saved_text unless this method was
@@ -192,36 +190,38 @@ class Functions:
 
     def get_element_text_alt(self, element, expected, actual, description):
         el_html = element.get_attribute("outerHTML")
-        returnValue = ""
+        # returnValue = ""
         if el_html.find("<input") > -1:
-            returnValue = element.get_attribute("value")
+            return_value = element.get_attribute("value")
         else:
             try:
-                returnValue = element.text
-            except:
-                returnValue = element.get_attribute("innerText")
-        print(f"Retrieved Text: {returnValue}")
+                return_value = element.text
+            except ValueError as e:
+                return_value = element.get_attribute("innerText")
+                print(f"Getting innerText {e}")
+        print(f"Retrieved Text: {return_value}")
         self.log_equal_action("Get Text", expected, actual, description)
-        return returnValue
+        return return_value if return_value is not None else ""
 
 
     @staticmethod
     def get_element_text_silently(element):
         el_html = element.get_attribute("outerHTML")
         # print(f"el_html = {el_html}")
-        returnValue = ""
+        # return_value = ""
         if el_html.find("<input") > -1:
-            returnValue = element.get_attribute("value")
+            return_value = element.get_attribute("value")
         else:
             try:
-                returnValue = element.text
-            except:
-                returnValue = element.get_attribute("innerText")
+                return_value = element.text
+            except ValueError as e:
+                return_value = element.get_attribute("innerText")
+                print(f"Getting innerText {e}")
 
-        return returnValue
+        return return_value if return_value is not None else ""
 
     def compare_element_text_to_saved_text(self, accessor_type, accessor, actual, expected, description):
-        element_text = self.get_element_text(accessor_type, accessor, self.saved_text, "Comparing against saved text.")
+        self.get_element_text(accessor_type, accessor, self.saved_text, "Comparing against saved text.")
         print(f"Compared Text: {expected} vs {self.saved_text}")
         self.log_equal_action("Compare Text", expected, actual, description)
 
@@ -239,7 +239,6 @@ class Functions:
 
 
     def perform_screenshot(self, screenshot_file_name, description):
-        file_saved = False
         try:
             screenshot = pyautogui.screenshot()
             screenshot.save("screenshots/" + screenshot_file_name)
@@ -248,6 +247,7 @@ class Functions:
             print(e)
             self.driver.save_screenshot("screenshots/" + screenshot_file_name)
             file_saved = True
+        file_saved = file_saved if file_saved is not None else False
         self.log_equal_action("Take Screenshot", "True", str(file_saved),description)
 
     def perform_wait(self, text_url, description):
@@ -286,7 +286,7 @@ class Functions:
     def wait_for_element_to_be_clickable(self, selector_type, selector, wait_time, description):
         # wait = WebDriverWait(driver, 20)
         print(f"Waiting {wait_time} seconds for element to be clickable.")
-        if wait_time == None:
+        if wait_time is None:
             wait_time = 20
         wait = WebDriverWait(self.driver, int(wait_time))
         try:
@@ -306,9 +306,9 @@ class Functions:
                 wait.until(expected_conditions.element_to_be_clickable((By.NAME, selector)))
             element = self.get_element(selector_type, selector)
             self.log_equal_action("Wait for clickable element", "n/a", "n/a", description)
-        except:
+        except ValueError as e:
             element = None
-            self.log_equal_action("Wait for clickable element", "n/a", "None", description)
+            self.log_equal_action("Wait for clickable element", "n/a", "None", description + " - " + e)
         return element
 
     def get_json_from_api(self, api_url, description):
@@ -360,9 +360,9 @@ class Functions:
         else:
             sheet.cell(row, 7).value = self.driver.current_url
         workbook.save(self.log_file_name)
-        print("-" * 80)
+        print("-" * variables.dash_length)
         print(f"Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True,description)}\t|\tStatus:{status}")
-        print("-" * 80)
+        print("-" * variables.dash_length)
 
     def log_contains_action(self, action, expected, actual, description):
         workbook = openpyxl.load_workbook(self.log_file_name)
@@ -427,31 +427,27 @@ class Functions:
         file = open(file_name, "w")
         file.write(f"The xPath and Css Selectors are for URL: {self.driver.current_url}\r\n")
         file.write(f"Selector Type: {accessor_type} - Selector: {accessor}\r\n")
-        file.write("-" * 80)
+        file.write("-" * variables.dash_length)
         file.write(f"\r\n")
         status = False
         elements = self.get_elements(accessor_type, accessor)
-        xpath = ""
+
         for element in elements:
-            print(f"\nTag_Name = {element.tag_name}")
+            # print(f"\nTag_Name = {element.tag_name}")
             file.write(f"Tag_Name = {element.tag_name}\r\n")
             if element.get_attribute("id") is not None and len(element.get_attribute("id")) > 0:
                 xpath = f"XPath = //{element.tag_name}" + "[@id='" + element.get_attribute("id") + "']"
-                print(f"xPath variable: {xpath}")
-                print(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']")
-                # file.write(f"XPath = //{element.tag_name}[@id='{element.get_attribute("id")}']\r\n")
+                # print(f"XPath = {xpath}")
                 file.write(f"{xpath}\r\n")
-                print(f'Css_Selector = {element.tag_name}#{element.get_attribute("id")}')
+                # print(f'Css_Selector = {element.tag_name}#{element.get_attribute("id")}')
                 file.write(f'Css_Selector = {element.tag_name}#{element.get_attribute("id")}\r\n')
                 status = True
             elif element.get_attribute("class") is not None and len(element.get_attribute("class")) > 0:
                 xpath = f"XPath = //{element.tag_name}" + "[@class='" + element.get_attribute("class") + "']"
-                print(f"xPath variable: {xpath}")
-                print(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']")
+                # print(f"XPath = {xpath}")
                 file.write(f"{xpath}\r\n")
-                # file.write(f"XPath = //{element.tag_name}[@class='{element.get_attribute("class")}']\r\n")
-                print(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}")
-                file.write(f"Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(' ','.')}\r\n")
+                # print(f'Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(" ",".")}')
+                file.write(f'Css_Selector = {element.tag_name}.{element.get_attribute("class").replace(" ",".")}\r\n')
                 status = True
             else:
                 parent = element.find_element(By.XPATH, "..")
@@ -466,12 +462,17 @@ class Functions:
                     parent = parent.find_element(By.XPATH, "..")
                     # print(f"In process parent.tag_name = {parent.tag_name} and xpath_selector = {xpath_selector}")
                 xpath_selector = "//" + xpath_selector
-                print(f"XPath = {xpath_selector}")
+                # print(f"XPath = {xpath_selector}")
                 file.write(f"XPath = {xpath_selector}\r\n")
-                print(f"Css_Selector = {css_selector}")
+                # print(f"Css_Selector = {css_selector}")
                 file.write(f"Css_Selector = {css_selector}\r\n")
                 status = True
-        self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
+        if status:
+            print(f"\r\nxPath and Css Selectors written to file: {file_name}")
+        else:
+            print(f"\r\nSomething went wrong when attempting to get xPath and Css Selectors for file: {file_name}")
+        # self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
+        self.log_equal_action("Get xPaths & Css Selectors", str(True), str(status), description)
 
     # This method prints all table information based on the accessor_type and accessor, but
     # can also change the display orientation based on the text/URL value.
@@ -503,7 +504,7 @@ class Functions:
                     row_data = row_data + td.text + "\t| "
             if len(row_data) > 0:
                 print(row_data)
-        self.log_equal_action("Get Table Information", "n/a", "n/a", description)
+        self.log_equal_action("Get Table Data", "n/a", "n/a", description)
 
     # This method prints all table information based on the accessor_type and accessor, but
     # can also change the display orientation based on the text/URL value.
@@ -538,7 +539,7 @@ class Functions:
 
             if len(row_data) > 0:
                 print(row_data)
-        self.log_equal_action("Get Table Information", "n/a", "n/a", description)
+        self.log_equal_action("Get Table Data", "n/a", "n/a", description)
 
     # This method saves each page's HAR file to the global har contents variable
     # so that tag information can be extracted at a later time.
@@ -556,9 +557,11 @@ class Functions:
             status = True
             # If this doesn't have a save complete har file among the commands,
             # get the GA4 tags in the har content
+
             if not self.check_save_complete_har_file():
-                self.get_ga4_analytics_tags(har_content, "")
-        self.log_equal_action("Get HAR for tag information.", str(True), str(status), description)
+                self.get_ga4_analytics_tags(har_content)
+                # self.get_ga4_analytics_tags(har_content, "")
+        self.log_equal_action("Get HAR for tag data.", str(True), str(status), description)
 
     def save_complete_har_file(self, file_name:str = None, description:str = None) -> None:
         java_script_command = "const resources = performance.getEntriesByType('resource');\n"
@@ -566,30 +569,32 @@ class Functions:
         java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
         java_script_command = java_script_command + "});\nreturn returnValue;"
         status = False
+        file_name = self.update_file_name(file_name,"har")
         # If the har_file_name is blank, it is the first time through so delete the old file
         # for subsequent saves, just append to the existing file
         if self.har_file_name == "" or self.har_file_name is None:
-            exists = self.delete_file(file_name)
+            self.delete_file(file_name, "Complete Har File")
             self.har_file_name = file_name
 
         har_content = str(self.driver.execute_script(java_script_command))
         self.har_file_contents = self.har_file_contents + har_content
         if self.har_file_contents is not None and len(self.har_file_contents) > 0:
             # if no file_name is passed in, create one
-            if file_name is None or len(file_name) <= 0:
-                now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
-                file_name = "har_file" + now + ".txt"
+            # if file_name is None or len(file_name) <= 0:
+            #     now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
+            #     file_name = "har_file" + now + ".txt"
             # If file_name not being set to specific file location and doesn't include the data folder
             # add the data folder, otherwise leave the file_name alone.
-            if ":" not in file_name and "har_files/" not in file_name:
-                file_name = "har_files/" + file_name
-                file = open(file_name, "a")
-                file.write(self.har_file_contents)
-                # print(f"har_content written to ({file_name}).\r\n{har_content}")
-                print(f"har_content written to ({file_name}).\r\n")
-                status = True
-            self.get_ga4_analytics_tags(self.har_file_contents, file_name)
+            # if ":" not in file_name and "har_files/" not in file_name:
+            #     file_name = "har_files/" + file_name
+            file = open(file_name, "a")
+            file.write(self.har_file_contents)
+            print(f"har_content written to ({file_name}).\r\n")
+            status = True
+            # self.get_ga4_analytics_tags(self.har_file_contents, file_name)
+            self.get_ga4_analytics_tags(self.har_file_contents)
         self.log_equal_action("Save HAR file", str(True), str(status), description)
+
 
     # Thinking of removing this method and just keeping the save_complete_har_file
     # in which I can add the page url at the top of the file to delineate between different URLs
@@ -599,35 +604,39 @@ class Functions:
         java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
         java_script_command = java_script_command + "});\nreturn returnValue;"
         status = False
+        file_name = self.update_file_name(file_name, "har")
         # If the har_file_name is blank, it is the first time through so delete the old file
         # for subsequent saves, just append to the existing file
         if self.har_file_name == "" or self.har_file_name is None:
-            exists = self.delete_file(file_name)
+            self.delete_file(file_name, "Individual Har File")
             self.har_file_name = file_name
 
         har_content = str(self.driver.execute_script(java_script_command))
 
         if har_content is not None and len(har_content) > 0:
             # if no file_name is passed in, create one
-            if file_name is None or len(file_name) <= 0:
-                now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
-                file_name = "har_file" + now + ".txt"
+            # if file_name is None or len(file_name) <= 0:
+            #     now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
+            #     file_name = "har_file" + now + ".txt"
             # If file_name not being set to specific file location and doesn't include the data folder
             # add the data folder, otherwise leave the file_name alone.
-            if ":" not in file_name and "har_files/" not in file_name:
-                file_name = "har_files/" + file_name
-                file = open(file_name, "a")
-                file.write(har_content)
-                # print(f"har_content written to ({file_name}).\r\n{har_content}")
-                print(f"har_content written to ({file_name}).\r\n")
-                status = True
-            self.get_ga4_analytics_tags(har_content, file_name)
+            # if ":" not in file_name and "har_files/" not in file_name:
+                # file_name = "har_files/" + file_name
+            file = open(file_name, "a")
+            file.write(har_content)
+            # print(f"har_content written to ({file_name}).\r\n{har_content}")
+            print(f"har_content written to ({file_name}).\r\n")
+            status = True
+            # self.get_ga4_analytics_tags(har_content, file_name)
+            self.get_ga4_analytics_tags(har_content)
         self.log_equal_action("Save HAR file", str(True), str(status), description)
 
-    def get_ga4_analytics_tags(self, har_content:str, file_name:str) -> None:
+    # def get_ga4_analytics_tags(self, har_content:str, file_name:str) -> None:
+    def get_ga4_analytics_tags(self, har_content:str) -> None:
+        # May eventually allow saving tags to a file but currently, this just prints them out
         status = False
         description = "Check for GA4 Analytics Tags"
-        file_name = file_name.replace(".", "_GA4_Tags.")
+        # file_name = file_name.replace(".", "_GA4_Tags.")
         if variables.ga4_analytics_identifier in har_content and variables.google_analytics_identifier in har_content:
             # if self.has_save_complete:
             print("GA4 Analytics Tags Found!")
@@ -648,14 +657,29 @@ class Functions:
             print("No GA4 Analytics Tags Found")
         self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
 
+    # Placed all save file type updating for directory information into a single method
+    # where the file_type parameter determines where the file will be saved
+    def update_file_name(self, file_name, file_type):
+        if file_type.lower() == "har" and ":" not in file_name and "har_files/" not in file_name:
+            if file_name is None or len(file_name) <= 0:
+                now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
+                file_name = "har_file" + now + ".txt"
+            return "har_files/" + file_name
+        elif file_type.lower() == "selector" and ":" not in file_name and "selector_files/" not in file_name:
+            return "selector_files/" + file_name
+        elif file_type.lower() == "screenshot" and ":" not in file_name and "screenshots/" not in file_name:
+            return "screenshots/" + file_name
+        return file_name
+
     # This method deletes the file based on the file_name parameter passed in
-    def delete_file(self, file_name) -> bool:
+    @staticmethod
+    def delete_file(file_name, description = None) -> bool:
         if os.path.exists(file_name):
             os.remove(file_name)
-            print("File deleted.")
+            print(f"Prior {description} ({file_name}) - File deleted.")
             return True
         else:
-            print("File does not exist.")
+            print(f"Prior {description} ({file_name}) - File does not exist.")
             return False
 
 
@@ -679,7 +703,8 @@ class Functions:
         sheet.cell(row, 6).style = start_style
         sheet.cell(row, 7).style = start_style
 
-    def set_close_driver_theme(self, sheet, row):
+    @staticmethod
+    def set_close_driver_theme(sheet, row):
         end_style = "Neutral"
         sheet.cell(row, 1).style = end_style
         sheet.cell(row, 2).style = end_style
@@ -721,7 +746,7 @@ class Functions:
         command_list = self.read_excel_command_file(False)
         for command, selector_type, selector, text_url, expected, actual, description in command_list:
             if command.lower() == command_library.save_complete_har_file:
-                has_save_complete = True
+                self.has_save_complete = True
                 break
 
         return self.has_save_complete
@@ -732,7 +757,8 @@ class Functions:
     # Then place them in reverse order so they are highest to lowest.
     # Check to ensure that more than 1 number is in the list otherwise, only the highest is remaining.
     # Finally, get the second item from the array or list and that is the second-highest number.
-    def get_second_highest_number_from_array(self):
+    @staticmethod
+    def get_second_highest_number_from_array():
         numbers = [10, 20, 40, 20, 50, 40, 50]
 
         # Remove duplicates and sort in descending order
