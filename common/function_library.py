@@ -544,6 +544,8 @@ class Functions:
     # This method saves each page's HAR file to the global har contents variable
     # so that tag information can be extracted at a later time.
     def get_har_file_for_tag_information(self) -> None:
+        if self.driver.current_url == "data:,":
+            return
         java_script_command = "const resources = performance.getEntriesByType('resource');\n"
         java_script_command = java_script_command + "var returnValue = '';\nresources.forEach((entry) => {\n"
         java_script_command = java_script_command + "   returnValue += `${entry.name}'s startTime: ${entry.startTime}\r\n`\n"
@@ -656,6 +658,59 @@ class Functions:
         else:
             print("No GA4 Analytics Tags Found")
         self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
+
+
+
+
+    # This is just an idea at this point but the gist is this:
+    # the selector_type has a tag type, ie..GA4, TikTok, facebook, pinterest
+    # the selector field has a comma delimited string containing values to
+    # check for so this loops through the har_content and searches for the
+    # information.  The expected field contains a comma delimited list of
+    # tag parameters to match against and the text_url field is the har_content or har file.
+    def check_page_tagging(self, selector_type, selector, text_url, expected, description):
+        if text_url is not None and len(text_url) > 1 and os.path.exists(text_url):
+            har_contents = ""
+            file = open(text_url,"r")
+            for line in file:
+                har_contents = har_contents + line + "\n"
+            ar_har = har_contents.split("\n")
+        elif text_url is not None and len(text_url) > 1 and not os.path.exists(text_url):
+            print(f"The supplied path does not exist: {text_url}")
+            return
+        else:
+            if len(self.har_file_contents) <= 0:
+                self.get_har_file_for_tag_information()
+            ar_har = self.har_file_contents.split("\n")
+            # print("Har contents: " + self.har_file_contents)
+        ar_expected = expected.split(",")
+        items = len(ar_expected)
+        found = 0
+        # selector_found = 0
+        for har_entry in ar_har:
+            # print(f"Checking har Entry: {har_entry} for selector_type: {selector_type}")
+            if selector_type in har_entry:
+                for exp in ar_expected:
+                    # remove any spaces in the search expression which should be key=value
+                    exp = exp.replace(' ', '')
+                    # print(f"Checking har Entry: {har_entry} \n\tfound selector_type: {selector_type} searching for value: {exp}")
+                    # print(f"Checking har Entry for value {exp}")
+                    if exp in har_entry:
+                        found = found + 1
+                        print(f"Found selector_type: {selector_type} and value: {exp}")
+                        if found == items:
+                            print("All tag parameters found!")
+                            break
+            if found == items:
+                break
+        status = True if items == found else False
+        if status:
+            status_message = f"Matching {selector_type} tag found!"
+        else:
+            status_message = f"Matching {selector_type} tag NOT found!"
+        self.log_equal_action(f"{selector_type} tag found", str(True), str(status), description)
+
+
 
     # Placed all save file type updating for directory information into a single method
     # where the file_type parameter determines where the file will be saved

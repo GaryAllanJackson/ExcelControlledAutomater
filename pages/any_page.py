@@ -81,6 +81,9 @@ class AnyPage:
             elif command.lower() == command_library.save_complete_har_file:
                 self.funct.save_complete_har_file(text_url, description)
                 has_save_complete = True
+            elif command.lower() == command_library.check_page_tagging:
+                # currently don't need selector but leaving temporarily just in case
+                self.funct.check_page_tagging(selector_type, selector, text_url, expected, description)
 
 
 

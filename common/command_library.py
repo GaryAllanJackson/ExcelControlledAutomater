@@ -21,5 +21,6 @@ get_all_xpath_and_css_selectors = "get all xpath and css selectors"
 get_table_information = "get table information"
 save_har_file = "save har file"
 save_complete_har_file = "save complete har file"
+check_page_tagging = "check page tagging"
 
 
