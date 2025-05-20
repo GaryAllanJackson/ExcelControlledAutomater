@@ -1,4 +1,5 @@
 import os
+from contextlib import nullcontext
 from datetime import datetime
 import time
 from urllib.parse import urlparse, parse_qs
@@ -710,7 +711,109 @@ class Functions:
             status_message = f"Matching {selector_type} tag NOT found!"
         self.log_equal_action(f"{selector_type} tag found", str(True), str(status), description)
 
+    def check_image_tags_for_alt_text(self, selector_type, selector, description):
+        elements = self.get_elements(selector_type, selector)
+        total_count = len(elements)
+        missing_alt_count = 0
+        for element in elements:
+            alt_text = element.get_attribute("alt")
+            if alt_text is None or alt_text == nullcontext or len(alt_text) <= 0:
+                print(f"Element missing alt text: {element.get_attribute('outerHTML')}")
+                missing_alt_count = missing_alt_count + 1
+        # status = True if missing_alt_count == 0 else False
+        self.log_equal_action(f"Image Alt Tag Check", str(total_count), str(missing_alt_count), description)
 
+    def wcag_ada_check_controller_old(self, description):
+        # overall selector_type
+        selector_type = "css_selector"
+        # image element
+        selector = variables.wcag_ada_img[0]
+        expected = variables.wcag_ada_img[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # wcag_ada_button element
+        selector = variables.wcag_ada_button[0]
+        expected = variables.wcag_ada_button[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # nav element
+        selector = variables.wcag_ada_nav[0]
+        expected = variables.wcag_ada_nav[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # section element
+        selector = variables.wcag_ada_section[0]
+        expected = variables.wcag_ada_section[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # form element
+        selector = variables.wcag_ada_form[0]
+        expected = variables.wcag_ada_form[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # table
+        selector = variables.wcag_ada_table[0]
+        expected = variables.wcag_ada_table[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        #th element
+        selector = variables.wcag_ada_th[0]
+        expected = variables.wcag_ada_th[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # iframe element
+        selector = variables.wcag_ada_iframe[0]
+        expected = variables.wcag_ada_iframe[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # svg element
+        selector = variables.wcag_ada_svg[0]
+        expected = variables.wcag_ada_svg[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # video element
+        selector = variables.wcag_ada_video[0]
+        expected = variables.wcag_ada_video[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # source element
+        selector = variables.wcag_ada_video_source[0]
+        expected = variables.wcag_ada_video_source[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+        # track element
+        selector = variables.wcag_ada_video_track[0]
+        expected = variables.wcag_ada_video_track[1:]
+        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+
+    def wcag_ada_check_controller(self, description):
+        selector_type = "css_selector"
+        for item in variables.wcag_ada_array:
+            selector = item[0]
+            expected = item[1:]
+            self.wcag_ada_checks(selector_type, selector, expected, description, True)
+
+    def wcag_ada_checks(self, selector_type, selector, expected, description, is_array = False):
+        log_action = selector if selector is not None else "Complete"
+        if selector_type is not None:
+            print(selector_type, selector, is_array)
+            elements = self.get_elements(selector_type, selector)
+            if is_array == False:
+                items = expected.split(",")
+            else:
+                items = expected
+            total_count = len(elements) * len(items)
+            print(f"Total elements found for {selector}: {total_count}")
+            missing_param_count = total_count
+            for element in elements:
+                for item in items:
+                    if "<" in item:
+                        child_selector = item.replace("<","").replace(">","")
+                        print(f"child_selector = {child_selector}")
+                        try:
+                            child = element.find_element(By.TAG_NAME, child_selector)
+                            print(f"Child element is: {child}")
+                            if child is None or child == nullcontext or len(child) <= 0:
+                                print(f"Element missing child ({child}): {element.get_attribute('outerHTML')}")
+                                missing_param_count = missing_param_count - 1
+                        except:
+                            print(f"Child element {child_selector} does not exist.")
+                    else:
+                        param = element.get_attribute(item)
+                        print(f"Checking for param = {item}")
+                        if param is None or param == nullcontext or len(param) <= 0:
+                            print(f"Element missing {item}: {element.get_attribute('outerHTML')}")
+                            missing_param_count = missing_param_count - 1
+            self.log_equal_action(f"{log_action} WCAG/ADA Check", str(total_count), str(missing_param_count), description)
 
     # Placed all save file type updating for directory information into a single method
     # where the file_type parameter determines where the file will be saved

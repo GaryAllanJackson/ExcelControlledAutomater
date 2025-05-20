@@ -23,4 +23,9 @@ save_har_file = "save har file"
 save_complete_har_file = "save complete har file"
 check_page_tagging = "check page tagging"
 
+perform_wcag_ada_checks = "perform wcag ada checks"
+# Check image command removed in favor of perform wcag ada checks
+# command, which can check all wcag and ada elements
+# check_image_tags_for_alt_text = "check image alt text"
+
 

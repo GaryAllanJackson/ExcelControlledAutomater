@@ -84,6 +84,13 @@ class AnyPage:
             elif command.lower() == command_library.check_page_tagging:
                 # currently don't need selector but leaving temporarily just in case
                 self.funct.check_page_tagging(selector_type, selector, text_url, expected, description)
-
+            # elif command.lower() == command_library.check_image_tags_for_alt_text:
+            #     self.funct.check_image_tags_for_alt_text(selector_type, selector, description)
+            elif command.lower() == command_library.perform_wcag_ada_checks:
+                if selector_type is not None and selector is not None:
+                    print(f"In any_page selector_type = {selector_type}")
+                    self.funct.wcag_ada_checks(selector_type, selector, expected, description, False)
+                else:
+                    self.funct.wcag_ada_check_controller(description)
 
 
