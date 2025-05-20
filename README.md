@@ -1,4 +1,10 @@
-This is a Configurable Automated Testing application that uses Python, Selenium and Excel.    
+This is a Configurable Automated Testing application that uses Python, Selenium and Excel. 
+    PyTest: pip install pytest
+    html reports: pip install pytest-html
+    Update reports with screenshots - Beautiful Soup: pip install beautifulsoup4
+    Excel (read/write) - pip install openpyxl
+    Full size screenshots - pip install pillow pyscreeze pyautogui
+   
 Excel is used to describe the action, selector_type, selector, expected value, actual value and description for each action.
 A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting it's alterability, is used to create separate Excel files(CommandScripts.xlsx) 
 that are used by the application to perform one or more actions.
