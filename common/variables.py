@@ -11,21 +11,10 @@ unsecure_protocol = "http://"
 secure_protocol = "https://"
 dash_length = 120
 
-wcag_ada_img = ["img","alt", "src"]
-wcag_ada_button = ["button", "aria-label"]
-wcag_ada_input = ["input", "id", "name", "type"]
-wcag_ada_input_label = ["label", "for"]
-wcag_ada_textarea = ["textarea", "id", "name"]
-wcag_ada_nav = ["nav", "aria-label"]
-wcag_ada_section = ["section", "aria-label"]
-wcag_ada_form = ["form", "aria-label"]
-wcag_ada_table = ["table", "<caption>"]
-wcag_ada_th = ["th", "scope"]
-wcag_ada_iframe = ["iframe", "src", "title"]
-wcag_ada_svg = ["svg", "role", "aria-label", "<title>"]
-wcag_ada_video = ["video", "<source>"]
-wcag_ada_video_source = ["source", "src", "type"]
-wcag_ada_video_track = ["track", "kind", "src", "srclang", "label"]
+# This array is for testing WCAG and ADA compliance
+# The first item of each array is the element, items without <> surrounding them are parameters
+# items with <> surrounding them are child elements that must be present for compliance
+# but for the "a" element, the items are text that should not be present as the link text.
 wcag_ada_array = [
     ["img","alt", "src"],
     ["button", "aria-label"],
@@ -41,6 +30,7 @@ wcag_ada_array = [
     ["svg", "role", "aria-label", "<title>"],
     ["video", "<source>"],
     ["source", "src", "type"],
-    ["track", "kind", "src", "srclang", "label"]
+    ["track", "kind", "src", "srclang", "label"],
+    ["a", "click", "here"]
 ]
 

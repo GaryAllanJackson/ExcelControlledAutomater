@@ -784,6 +784,7 @@ class Functions:
 
     def wcag_ada_checks(self, selector_type, selector, expected, description, is_array = False):
         log_action = selector if selector is not None else "Complete"
+        message_printed = False
         if selector_type is not None:
             print(selector_type, selector, is_array)
             elements = self.get_elements(selector_type, selector)
@@ -808,11 +809,21 @@ class Functions:
                         except:
                             print(f"Child element {child_selector} does not exist.")
                     else:
-                        param = element.get_attribute(item)
-                        print(f"Checking for param = {item}")
-                        if param is None or param == nullcontext or len(param) <= 0:
-                            print(f"Element missing {item}: {element.get_attribute('outerHTML')}")
-                            missing_param_count = missing_param_count - 1
+                        if element.tag_name.lower() != "a":
+                            param = element.get_attribute(item)
+                            print(f"Checking for param = {item}")
+                            if param is None or param == nullcontext or len(param) <= 0:
+                                print(f"Element missing {item}: {element.get_attribute('outerHTML')}")
+                                missing_param_count = missing_param_count - 1
+                        else:
+                            if not message_printed:
+                                print(f"Checking for invalid text: {item}")
+                                message_printed = True
+                            text = self.get_element_text_silently(element)
+                            if text.lower() == item.lower():
+                                print(f"Element has invalid text: {item}: {element.get_attribute('outerHTML')}")
+                                missing_param_count = missing_param_count - 1
+
             self.log_equal_action(f"{log_action} WCAG/ADA Check", str(total_count), str(missing_param_count), description)
 
     # Placed all save file type updating for directory information into a single method

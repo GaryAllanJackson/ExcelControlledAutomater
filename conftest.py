@@ -1,10 +1,13 @@
+import os
+
+import pyautogui
 import pytest
 from selenium import webdriver
 from common.function_library import Functions
 
 
 
-
+driver = None
 @pytest.fixture()
 def setup():
     opt = get_chrome_options()
@@ -67,9 +70,9 @@ def _capture_screenshot(file_name):
         print("Where the fuck is the driver!!!")
     else:
         print(f"Driver is not None!!!")
-    # screenshot = pyautogui.screenshot()
-    # screenshot.save(file_name)
-    driver.save_screenshot(file_name)
+    screenshot = pyautogui.screenshot()
+    screenshot.save(file_name)
+    # driver.save_screenshot(file_name)
 
 
 
