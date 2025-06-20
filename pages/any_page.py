@@ -1,6 +1,7 @@
 from common.function_library import Functions
 from common import command_library
-
+# import sys
+# print("\n".join(sys.modules.keys()))
 
 
 class AnyPage:
@@ -9,7 +10,7 @@ class AnyPage:
         self.command_list = None
         self.driver = driver
         self.funct = Functions(self.driver)
-
+        self.connection_string = None
 
 
     def any_page(self):
@@ -92,5 +93,12 @@ class AnyPage:
                     self.funct.wcag_ada_checks(selector_type, selector, expected, description, False)
                 else:
                     self.funct.wcag_ada_check_controller(description)
+            elif command.lower() == command_library.connect_to_database:
+                self.connection_string = self.funct.connect_to_database(text_url, description)
+            elif command.lower() == command_library.query_database:
 
-
+                if self.connection_string is not None:
+                    data = self.funct.get_data_using_sql_alchemy(text_url,self.connection_string, description,False)
+                    # print(data)
+                else:
+                    print("The Connect to Database command must be issued before the Query Database command!\nSkipping this command.")

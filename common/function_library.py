@@ -14,7 +14,22 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from common import variables, command_library
+import pandas
+import pyodbc
+from sqlalchemy import create_engine, text
 
+import sys
+import contextlib
+
+@contextlib.contextmanager
+def suppress_stderr():
+    with open(os.devnull, 'w') as fnull:
+        stderr = sys.stderr
+        sys.stderr = fnull
+        try:
+            yield
+        finally:
+            sys.stderr = stderr
 
 class Functions:
     def __init__(self, driver):
@@ -28,6 +43,7 @@ class Functions:
         self.har_file_name = ""
         self.har_file_contents = ""
         self.has_save_complete = False
+        self.engine = None
 
     def navigate(self, page_url, description):
         if variables.unsecure_protocol in self.driver.current_url or variables.secure_protocol in self.driver.current_url:
@@ -358,6 +374,7 @@ class Functions:
         if action.lower() == "close driver":
             sheet.cell(row, 7).value = "n/a"
             self.set_close_driver_theme(sheet, row)
+            print("\n")
         else:
             sheet.cell(row, 7).value = self.driver.current_url
         workbook.save(self.log_file_name)
@@ -940,3 +957,43 @@ class Functions:
             print("Second highest number is:", second_highest)
         else:
             print("Not enough unique numbers to determine second highest.")
+
+    def connect_to_database(self, text_url, description):
+        connection_objects = text_url.split(",")
+        server_objects = connection_objects[0].split("=")
+        server = server_objects[1]
+        database_objects = connection_objects[1].split("=")
+        database = database_objects[1]
+        print(f"server = {server}")
+        print(f"database = {database}")
+        connection_string = variables.connection_string_template.replace("*server*", server).replace("*database*", database)
+        print(f"connection_string = {connection_string}")
+        self.engine = create_engine(connection_string)
+        return connection_string
+
+    def get_data_using_sql_alchemy(self, sql_query, connection_string, description, show_data = False):
+        if self.engine is None:
+            print(f"Database engine not set in the constructor!\nAttempting to set it using connection_string: {connection_string}")
+            self.engine = create_engine(connection_string)
+            if self.engine is None:
+                print("Database engine is still not set! Exiting get_data() function!")
+                return
+        if sql_query is not None:
+            with self.engine.connect() as conn:
+                with suppress_stderr():
+                    data = pandas.read_sql(sql_query, conn)
+                    print(data)
+                    if show_data:
+                        for index, row in data.iterrows():
+                            print(f"Row {index}:")
+                            for col in data.columns:
+                                print(f"  {col}: {row[col]}")
+                        print("-" * 100)
+                status = True if data is not None else False
+                self.log_equal_action("Query Database", str(True), str(status), description)
+                return data
+
+
+
+    def __del__(self):
+        self.engine

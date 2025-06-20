@@ -16,6 +16,7 @@ Navigate                                |Navigate to URL                        
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
 Click                                   |Clicks the element based on the selector type and selector                                                                 |                                        |
 Compare Text                            |Compares element text, based on the selector type and selector, against last Get Text that was saved                       |                                        |
+Connect to Database                     |Provide Server Name and Database Name                                                                                      |Server=ServerName, Database=DatabaseName|
 Get all xpath and css selectors         |Prints all element xPath and Css Selector values based on selector type and selector and saves them to the specified file  |File Path and File Name                 |
 Get JSON from API                       |Gets JSON from the API endpoint                                                                                            |                                        |
 Get table information                   |Prints table information based on the selector type and selector in vertical or horizontal orientation                     |Horizontal or Vertical print orientation|
@@ -25,6 +26,7 @@ Perform WCAG ADA Checks                 |Checks all WCAG and ADA HTML elements w
 Print All Elements                      |Prints the text of all child elements based on the parent selector type and selector                                       |Print Child element values              |
 Print Child Elements                    |Prints the text of all child elements based on the parent selector type and selector                                       |Print Child element values              |
 Print Step Description                  |Prints the text provided to the output                                                                                     |Phrase to print                         |
+Query Database                          |Write a SQL Query to return results                                                                                        |Select * from myTable where Id = 1      |
 Refresh                                 |Refreshes the page resetting controls to initial values                                                                    |                                        |
 Right Click                             |Right Clicks the element based on the selector type and selector                                                           |                                        |
 Select All Elements                     |Selects all elements based on selector type and selector                                                                   |                                        |
@@ -37,7 +39,7 @@ Take Screenshot                         |Takes a screenshot                     
 Wait                                    |Wait a specified time in seconds                                                                                           |5                                       |
 Wait for clickable element              |Wait for the element based on the selector type and selector, to be clickable                                              |20                                      |
 Wait for element presence               |Wait up to 20 seconds for the presence of an element based on the selector type and selector                               |20                                      |
-Reset Sheet                             |Clears the Commands Sheet                                                                                                  |                                        |
+Reset Sheet                             |Clears the Commands Sheet                                                                                                               |                                        |
                                         |                                                                                                                           |                                        |
                                         |                                                                                                                           |                                        |
                                         |                                                                                                                           |                                        |

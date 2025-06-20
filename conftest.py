@@ -4,7 +4,8 @@ import pyautogui
 import pytest
 from selenium import webdriver
 from common.function_library import Functions
-
+import sys
+import contextlib
 
 
 driver = None
@@ -85,3 +86,5 @@ def close_driver(driver):
     funct.log_equal_action("Close Driver", "n/a", "n/a", "Closing Driver")
     driver.quit()
     print("\nDriver closed")
+
+

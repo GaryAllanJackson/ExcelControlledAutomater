@@ -33,4 +33,5 @@ wcag_ada_array = [
     ["track", "kind", "src", "srclang", "label"],
     ["a", "click", "here"]
 ]
-
+connection_string_template = f"mssql+pyodbc://@*server*/*database*" \
+    "?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server"
