@@ -1,4 +1,4 @@
-This is a Configurable Automated Testing application that uses Python, Selenium and Excel. 
+This is a Configurable-Automated Testing application that uses Python, Selenium and Excel. 
     PyTest: pip install pytest
     html reports: pip install pytest-html
     Update reports with screenshots - Beautiful Soup: pip install beautifulsoup4
@@ -6,7 +6,7 @@ This is a Configurable Automated Testing application that uses Python, Selenium 
     Full size screenshots - pip install pillow pyscreeze pyautogui
    
 Excel is used to describe the action, selector_type, selector, expected value, actual value and description for each action.
-A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting it's alterability, is used to create separate Excel files(CommandScripts.xlsx) 
+A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting its alter-ability, is used to create separate Excel files(CommandScripts.xlsx) 
 that are used by the application to perform one or more actions.
 An additional Excel file, TestLogs.xlsx, with a single Sheet entitled Logs, also not included, serves as the LogFile for the application.
 
@@ -65,7 +65,7 @@ Get table information          |id              |resultTable                    
 Get table information          |id              |resultTable                        |vertical                                                                                                           |                              |      |Get and Print table information vertically                                   |
 Save complete har file         |                |                                   |mycoolsite_complete_har_file.txt                                                                                   |                              |      |Saves one HAR file for all pages visited. Must be last command.              |
 Check Page Tagging             |google-analytics|                                   |                                                                                                                   |en=page_view,tid=G-SV00000000 |      |Checks Page Analytics/Media tags(google-analytics)                           |
-Check Page Tagging             |facebook        |                                   |                                                                                                                   |ev=PageView,id=300000000000000|      |Checks Page Analytics/Media tagss(facebook)                                  |
+Check Page Tagging             |facebook        |                                   |                                                                                                                   |ev=PageView,id=300000000000000|      |Checks Page Analytics/Media tags(facebook)                                  |
 Check Page Tagging             |google-analytics|                                   |har_files\mycoolsite_har_file_new.txt                                                                              |en=page_view,tid=G-SV00000000 |      |Checks Tags in saved har file(google-analytics)(filename in text_url field)  |
 Check Page Tagging             |facebook        |                                   |har_files\mycoolsite_har_file_new.txt                                                                              |ev=PageView,id=300000000000000|      |Checks Tags in saved har files(facebook)(filename in text_url field)         |
 Refresh                        |                |                                   |                                                                                                                   |                              |      |Refreshes the page resetting controls to initial values                      |
