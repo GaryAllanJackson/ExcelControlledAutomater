@@ -50,7 +50,7 @@ class AnyPage:
             elif command.lower() == command_library.refresh:
                 self.funct.perform_page_refresh()
             elif command.lower() == command_library.right_click:
-                pass
+                self.funct.perform_right_click(selector_type, selector, description)
             elif command.lower() == command_library.send_keys:
                 print(f"Calling perform_send_key: actual = {actual}")
                 self.funct.perform_send_key(selector_type, selector, text_url, expected, actual, description)
@@ -96,9 +96,13 @@ class AnyPage:
             elif command.lower() == command_library.connect_to_database:
                 self.connection_string = self.funct.connect_to_database(text_url, description)
             elif command.lower() == command_library.query_database:
-
                 if self.connection_string is not None:
                     data = self.funct.get_data_using_sql_alchemy(text_url,self.connection_string, description,False)
                     # print(data)
                 else:
                     print("The Connect to Database command must be issued before the Query Database command!\nSkipping this command.")
+            elif command.lower() == command_library.open_link_in_new_tab:
+                self.funct.open_link_in_new_tab(selector_type, selector, description)
+            elif command.lower() == command_library.close_tab:
+                print("in any_page calling close_tab")
+                self.funct.close_tab(text_url, description)

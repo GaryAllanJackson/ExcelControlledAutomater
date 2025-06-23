@@ -7,6 +7,7 @@ from urllib.parse import urlparse, parse_qs
 import pyautogui
 import requests
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common import keys
 from selenium.webdriver.common.by import By
 import openpyxl
 from selenium.webdriver.support import expected_conditions
@@ -329,21 +330,29 @@ class Functions:
         return element
 
     def get_json_from_api(self, api_url, description):
-        json_data = requests.get(api_url).json()
-        json_len = len(json_data)
-        field_lens_printed = False
-        print(f"JSON API - Number of records returned: {json_len}")
-        for i, item in enumerate(json_data, start=1):
-            if not field_lens_printed:
-                print(f"JSON API - Number of fields per record: {len(item)}")
-                field_lens_printed = True
-            fields_output = "{"
-            for key, value in item.items():
-                print(f"{i} - {key}:{value}")
-                fields_output = fields_output + key + ":" + str(value) + ", "
-            fields_output = str(i) + " - " + fields_output[:len(fields_output)-2] + "}"
-            print(fields_output)
-        self.log_equal_action("Get JSON from API", "n/a", "n/a", description)
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            # json_data = requests.get(api_url).json()
+            print(f"Successful API connection. Status code: {response.status_code}")
+            json_data = response.json()
+            json_len = len(json_data)
+            field_lens_printed = False
+            print(f"JSON API - Number of records returned: {json_len}")
+            for i, item in enumerate(json_data, start=1):
+                if not field_lens_printed:
+                    print(f"JSON API - Number of fields per record: {len(item)}")
+                    field_lens_printed = True
+                fields_output = "{"
+                for key, value in item.items():
+                    print(f"{i} - {key}:{value}")
+                    fields_output = fields_output + key + ":" + str(value) + ", "
+                fields_output = str(i) + " - " + fields_output[:len(fields_output)-2] + "}"
+                print(fields_output)
+            self.log_equal_action("Get JSON from API", "n/a", "n/a", description)
+        else:
+            print(f"Failed to retrieve API data. Status code: {response.status_code}")
+            self.log_equal_action("Get JSON from API", "n/a", "Failed", description)
+
 
     def log_equal_action(self, action: str, expected: str, actual: str, description: str) -> None:
         workbook = openpyxl.load_workbook(self.log_file_name)
@@ -997,3 +1006,35 @@ class Functions:
 
     def __del__(self):
         self.engine
+
+    def perform_right_click(self, selector_type, selector, description):
+        # action_chains = ActionChains(self.driver)
+        # element = self.get_element(selector_type, selector)
+        # action_chains.context_click(element).perform()
+        # self.log_equal_action("Right Click", "n/a", "n/a", description)
+        pass
+
+    def open_link_in_new_tab(self, selector_type, selector, description):
+        print(f"in open_link_in_new_tab selector_type: {selector_type} selector:{selector}")
+        context_menu_option = self.get_element(selector_type, selector)
+        print(f"in open_link_in_new_tab selector_type: sending keys")
+        context_menu_option.send_keys(keys.Keys.CONTROL + keys.Keys.RETURN)
+        print(f"in open_link_in_new_tab selector_type: keys sent")
+        self.log_equal_action("Context Click", "n/a", "n/a", description)
+
+    def close_tab(self, index, description):
+        win_handle = self.driver.window_handles
+        print(f"win_handle = {win_handle}")
+        current_handle = self.driver.current_window_handle
+        current_index = 0
+        for handle in win_handle:
+            if handle == current_handle:
+                break
+            else:
+                current_index += 1
+        print(f"index = {index} and current_index = {current_index}")
+        self.driver.switch_to.window(win_handle[int(index)])
+        print(f"switched to tab to close")
+        self.driver.close()
+        print(f"closed tab")
+        self.driver.switch_to.window(win_handle[current_index])

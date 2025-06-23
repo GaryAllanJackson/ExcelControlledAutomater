@@ -68,7 +68,8 @@ def _capture_screenshot(file_name):
     global driver
     print(f"In _capture_screenshot")
     if driver is None:
-        print("Where the fuck is the driver!!!")
+        # print("Where the fuck is the driver!!!")
+        print("Where is the driver!!!")
     else:
         print(f"Driver is not None!!!")
     screenshot = pyautogui.screenshot()
