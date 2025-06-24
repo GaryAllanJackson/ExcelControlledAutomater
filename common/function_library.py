@@ -735,6 +735,7 @@ class Functions:
             status_message = f"Matching {selector_type} tag found!"
         else:
             status_message = f"Matching {selector_type} tag NOT found!"
+        print(status_message)
         self.log_equal_action(f"{selector_type} tag found", str(True), str(status), description)
 
     def check_image_tags_for_alt_text(self, selector_type, selector, description):
