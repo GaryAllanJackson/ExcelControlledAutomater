@@ -6,11 +6,15 @@ This is a Configurable-Automated Testing application that uses Python, Selenium 
     Full size screenshots - pip install pillow pyscreeze pyautogui
    
 Excel is used to describe the action, selector_type, selector, expected value, actual value and description for each action.
-A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting its alter-ability, is used to create separate Excel files(CommandScripts.xlsx) 
-that are used by the application to perform one or more actions.
+A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting its alter-ability, 
+is used to create separate Excel files(CommandScripts.xlsx with the tab of commands entitled CommandScripts) that are used by the application 
+to perform one or more actions. 
+See a list of commands below and a sample CommandScripts.xlsx file at the bottom showing how each command is used.
+
 An additional Excel file, TestLogs.xlsx, with a single Sheet entitled Logs, also not included, serves as the LogFile for the application.
 
-At the time of this writing, Actions in the Commands.xlsm and CommandScripts.xlsx files consist of the following Commands and similar but not exact Descriptions:  (Descriptions listed below are more robust for general understanding.)
+At the time of this writing, Actions in the Commands.xlsm and CommandScripts.xlsx files consist of the following Commands and similar but not exact Descriptions:  
+(Descriptions listed below are more robust for general understanding.)
 Actions                                 |Description                                                                                                                |Display Value                           |
 Navigate                                |Navigate to URL                                                                                                            |Page URL                                |
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
@@ -43,7 +47,11 @@ Wait for clickable element              |Wait for the element based on the selec
 Wait for element presence               |Wait up to 20 seconds for the presence of an element based on the selector type and selector                               |20                                      |
 Reset Sheet                             |Clears the Commands Sheet                                                                                                  |                                        |
 ----------------------------------------------------------------------------------------------------------------
-Sample Excel CommandScripts.xlsx file.  Tab must be names CommandScripts
+Sample Excel CommandScripts.xlsx file.  Tab must be named CommandScripts.
+Simple rule to remember, if you are interacting with an element, you must provided the Selector_type and Selector for that element.
+If you are attempting to compare a value, you must provide the Expected value in the Expected column.
+The default value for comparing the URL after navigation is current_url.
+
 Command                        |Selector_type   |Selector                           |Text or URL                            |Expected                      |Actual|Description (50 characters or less for best presentation results) |
 Print Step Description         |                |                                   |========[ Start MySite Test ]==========|                              |      |Print start of test to run                                        |
 Navigate                       |                |                                   |https://www.mycoolsite.com/en-us       |current_url                   |      |Navigate to URL & check that Navigate URL matches current url     |
