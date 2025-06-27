@@ -1,5 +1,8 @@
 from common.function_library import Functions
 from common import command_library
+from common.web_scraper import WebScraper
+
+
 # import sys
 # print("\n".join(sys.modules.keys()))
 
@@ -11,6 +14,8 @@ class AnyPage:
         self.driver = driver
         self.funct = Functions(self.driver)
         self.connection_string = None
+        self.wps = WebScraper()
+        self.web_page = None
 
 
     def any_page(self):
@@ -106,3 +111,31 @@ class AnyPage:
             elif command.lower() == command_library.close_tab:
                 print("in any_page calling close_tab")
                 self.funct.close_tab(text_url, description)
+            elif command.lower() == command_library.retrieve_web_page:
+                self.web_page = self.wps.scrape_page(text_url)
+                retrieval_status = "Not Retrieved"
+                if self.web_page is not None and len(self.web_page) > 0:
+                    retrieval_status = "Retrieved"
+                self.funct.log_equal_action("Web Scrape", "Retrieved", retrieval_status, "Downloaded web page.")
+            elif command.lower() == command_library.save_web_page:
+                if self.web_page is None:
+                    self.web_page = self.wps.scrape_page(text_url)
+                if self.web_page is not None:
+                    self.wps.save_to_file(text_url, self.web_page)
+                    save_status = "Not Saved"
+                    if self.wps.check_file_exists(text_url):
+                        save_status = "Saved"
+                else:
+                    save_status = "Not Saved"
+                self.funct.log_equal_action("Save Web Page", "Saved", save_status, "Saved web page.")
+            elif command.lower() == command_library.retrieve_elements_and_list_properties:
+                if self.wps.response_page is not None and len(self.wps.response_page) > 0:
+                    include_line_delimiters = True if expected is not None and expected.lower() == "true" else False
+                    elements = self.wps.get_elements_and_list_properties(selector, text_url, self.wps.response_page, include_line_delimiters)
+                    save_status = f"Has no {text_url} elements"
+                    if elements is not None and len(elements) > 0:
+                        save_status = f"Has {text_url} elements"
+                else:
+                    save_status = "Error, page must first be retrieved!!!"
+                    print(save_status)
+                self.funct.log_equal_action("Get Web Page Elements", f"Has {text_url} elements", save_status, "Retrieve web page elements.")

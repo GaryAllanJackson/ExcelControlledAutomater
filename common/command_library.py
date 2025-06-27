@@ -31,5 +31,8 @@ perform_wcag_ada_checks = "perform wcag ada checks"
 # check_image_tags_for_alt_text = "check image alt text"
 connect_to_database = "connect to database"
 query_database = "query database"
+retrieve_web_page = "retrieve web page"
+save_web_page = "save web page"
+retrieve_elements_and_list_properties = "retrieve elements-list properties"
 
 
