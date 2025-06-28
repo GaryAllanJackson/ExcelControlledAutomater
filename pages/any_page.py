@@ -129,7 +129,15 @@ class AnyPage:
                     save_status = "Not Saved"
                 self.funct.log_equal_action("Save Web Page", "Saved", save_status, "Saved web page.")
             elif command.lower() == command_library.retrieve_elements_and_list_properties:
-                if self.wps.response_page is not None and len(self.wps.response_page) > 0:
+                if self.wps.get_response_page() is not None and len(self.wps.get_response_page()) > 0:
+                    include_line_delimiters = True if expected is not None and expected.lower() == "true" else False
+                    elements = self.wps.get_elements_and_list_properties(selector, text_url, self.wps.response_page, include_line_delimiters)
+                    save_status = f"Has no {text_url} elements"
+                    if elements is not None and len(elements) > 0:
+                        save_status = f"Has {text_url} elements"
+                elif self.funct.driver.current_url is not None and self.wps.get_response_page() is None:
+                    print("Get Web Page Elements: A Retrieve Web Page command was not issued, using current page.")
+                    self.web_page = self.wps.scrape_page(self.funct.driver.current_url)
                     include_line_delimiters = True if expected is not None and expected.lower() == "true" else False
                     elements = self.wps.get_elements_and_list_properties(selector, text_url, self.wps.response_page, include_line_delimiters)
                     save_status = f"Has no {text_url} elements"

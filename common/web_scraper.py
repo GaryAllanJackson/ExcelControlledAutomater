@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 class WebScraper:
 
     def __init__(self):
-        response_page = None
+        self.response_page = None
 
     def check_file_exists(self, file_name):
         status = False
