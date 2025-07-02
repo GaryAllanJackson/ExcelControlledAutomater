@@ -9,6 +9,13 @@ Excel is used to describe the action, selector_type, selector, expected value, a
 A separate Excel application, Commands.xlsm, that is not included with this application, due to source controls limiting its alter-ability, 
 is used to create separate Excel files(CommandScripts.xlsx with the tab of commands entitled CommandScripts) that are used by the application 
 to perform one or more actions. 
+To run the Excel Controlled Automation Program:
+Use the following command to use the default CommandScripts.xlsx file:
+    pytest .\tests\test_any_page.py -v -s --html=reports/test_any_page_report1.html
+NEW: Specific alternate test files can be run using the --testfile parameter:
+    pytest .\tests\test_any_page.py --testfile=./data/CommandScripts_AutomationPanda4.xlsx -v -s --html=reports/test_any_page_report1.html
+Passing tests, will be displayed in Green text and Failing tests will be displayed in Red text.
+
 See a list of commands below and a sample CommandScripts.xlsx file at the bottom showing how each command is used.
 
 An additional Excel file, TestLogs.xlsx, with a single Sheet entitled Logs, also not included, serves as the LogFile for the application.
@@ -18,6 +25,7 @@ At the time of this writing, Actions in the Commands.xlsm and CommandScripts.xls
 Actions                                 |Description                                                                                                                |Display Value                           |
 Navigate                                |Navigate to URL                                                                                                            |Page URL                                |
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
+Check Response Status Code              |Checks the response status code (100s=info,200s=Successful,300s=Redirect,400s=Client Error,500s=Server Error)              |https://www.mycoolsite.com/             |
 Click                                   |Clicks the element based on the selector type and selector                                                                 |                                        |
 Close tab                               |Closes an open tab                                                                                                         |1                                       |
 Compare Text                            |Compares element text, based on the selector type and selector, against last Get Text that was saved                       |                                        |
@@ -39,7 +47,7 @@ Select All Elements                     |Selects all elements based on selector 
 Save complete har file                  |Saves one HAR file for all pages on the site and must be the last command                                                  |File Path and File Name                 |
 Save HAR file                           |Saves the HAR contents to a file                                                                                           |File Path and File Name                 |
 Select dropdown by value                |Select dropdown value based on the selector type and selector and value                                                    |                                        |
-Send Keys                               |Sends keystroks to the element based on the selector type, selector and text to send                                       |Phrase/keys to send                     |
+Send Keys                               |Sends keystrokes to the element based on the selector type, selector and text to send                                       |Phrase/keys to send                     |
 Switch to Tab                           |Switches to a new tab based on the window index                                                                            |1                                       |
 Take Screenshot                         |Takes a screenshot                                                                                                         |File Path and File Name                 |
 Wait                                    |Wait a specified time in seconds                                                                                           |5                                       |
@@ -55,7 +63,8 @@ Reset Sheet                             |Clears the Commands Sheet              
 
 ----------------------------------------------------------------------------------------------------------------
 Sample Excel CommandScripts.xlsx file.  Tab must be named CommandScripts.
-Simple rule to remember, if you are interacting with an element, you must provided the Selector_type and Selector for that element.
+Simple rule to remember, if you are interacting with an element, you must provide the Selector_type and 
+Selector for that element.
 If you are attempting to compare a value, you must provide the Expected value in the Expected column.
 The default value for comparing the URL after navigation is current_url.
 
@@ -80,7 +89,7 @@ Get table information             |id              |resultTable                 
 Get table information             |id              |resultTable                        |vertical                               |                              |      |Get and Print table information vertically                        |
 Save complete har file            |                |                                   |mycoolsite_complete_har.txt            |                              |      |Saves one HAR file for all pages visited. Must be last command.   |
 Check Page Tagging                |google-analytics|                                   |                                       |en=page_view,tid=G-SV00000000 |      |Checks Page Analytics/Media tags(google-analytics)                |
-Check Page Tagging                |facebook        |                                   |                                       |ev=PageView,id=300000000000000|      |Checks Page Analytics/Media tagss(facebook)                       |
+Check Page Tagging                |facebook        |                                   |                                       |ev=PageView,id=300000000000000|      |Checks Page Analytics/Media tags(facebook)                       |
 Check Page Tagging                |google-analytics|                                   |har_files\mycoolsite_har_file.txt      |en=page_view,tid=G-SV00000000 |      |Checks Tags in saved har file (filename in text_url field)        |
 Check Page Tagging                |facebook        |                                   |har_files\mycoolsite_har_file.txt      |ev=PageView,id=300000000000000|      |Checks Tags in saved har files (filename in text_url field)       |
 Refresh                           |                |                                   |                                       |                              |      |Refreshes the page resetting controls to initial values           |
@@ -98,4 +107,5 @@ Query Database                    |                |                            
 Retrieve Web Page                 |                |                                   |https://mycoolsite.com/                |                              |      |Retrieves Web Page HTML based on text_url field                   | 
 Save Web Page                     |                |                                   |https://mycoolsite.com/                |                              |      |Saves/Retrieves Web page to data folder with valid name from URL. |
 Retrieve Elements-List Properties |tag_name        |img                                |src,alt,srcset                         |TRUE                          |      |Gets Retrieved page elements based on selector. Prints properties.|
-Spider Site Save URLs             |                |                                   |https://mycoolsite.com/                |mycool_site_links.txt         |      |Spiders site gets all hrefs and saves them to a file.             |
+Spider Site Save URLs             |                |                                   |https://mycoolsite.com/                |my_cool_site_links.txt        |      |Spiders site gets all hrefs and saves them to a file.             |
+Check Response Status Code        |                |                                   |https://mycoolsite.com/                |200                           |      |Checks the response status code.                                  |

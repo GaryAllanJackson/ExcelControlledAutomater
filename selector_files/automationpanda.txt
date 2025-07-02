@@ -1,0 +1,30 @@
+The xPath and Css Selectors are for URL: https://automationbookstore.dev/
+Selector Type: css_selector - Selector: a
+------------------------------------------------------------------------------------------------------------------------
+Tag_Name = a
+XPath = //a[@class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all']
+Css_Selector = a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r
+Tag_Name = a
+XPath = //a[@class='ui-btn ui-btn-icon-right ui-icon-carat-r']
+Css_Selector = a.ui-btn.ui-btn-icon-right.ui-icon-carat-r

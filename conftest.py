@@ -19,8 +19,10 @@ def setup():
     # funct = Functions(driver)
     # funct.navigate(variables.base_url, "Navigating to base URL")
     yield driver
-    # driver.quit()
-    close_driver(driver)
+    driver.quit()
+    # close_driver(driver)
+    # close_driver()
+    print("\nDriver closed")
 
 def get_chrome_options():
     opt = webdriver.ChromeOptions()
@@ -78,18 +80,27 @@ def _capture_screenshot(file_name):
     screenshot.save(file_name)
     # driver.save_screenshot(file_name)
 
+# This function parses the command line to allow the
+# retrieval of the --testfile argument
+def pytest_addoption(parser):
+    parser.addoption(
+        "--testfile",  # your custom CLI flag
+        action="store",
+        default=None,
+        help="Path to the external test file to use",
+    )
 
+# This function gets the command line argument --testfile
+@pytest.fixture
+def testfile(request):
+    return request.config.getoption("--testfile")
 
-def close_driver(driver):
-    # global driver
-    # funct = Functions(driver)
-
-    # has_save_complete = funct.check_save_complete_har_file()
-    # # print(f"has_save_complete = {has_save_complete}")
-    # if not has_save_complete:
-    #     funct.get_har_file_for_tag_information()
-    # funct.log_equal_action("Close Driver", "n/a", "n/a", "Closing Driver")
-    driver.quit()
-    print("\nDriver closed")
+# Removed this function as it was conflicting with the global driver
+# def close_driver():
+#     global driver
+#     if driver:
+#         driver.quit()
+#         driver = None
+#     print("\nDriver closed")
 
 

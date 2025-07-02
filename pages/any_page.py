@@ -16,6 +16,7 @@ class AnyPage:
         self.connection_string = None
         self.wps = WebScraper()
         self.web_page = None
+        self.test_file = None
 
     def tear_down_before_close_driver(self):
         has_save_complete = self.funct.check_save_complete_har_file()
@@ -27,7 +28,7 @@ class AnyPage:
     def any_page(self):
         # self.funct.get_second_highest_number_from_array()
         # return
-        self.command_list = self.funct.read_excel_command_file()
+        self.command_list = self.funct.read_excel_command_file(self.test_file, False)
         print("=" * 30 + "[ Start Commands Listing ]" + "=" * 30)
         print("Commands List Loaded! length = ", len(self.command_list))
         for command, selector_type, selector, text_url, expected, actual, description in self.command_list:
@@ -95,9 +96,8 @@ class AnyPage:
                 has_save_complete = True
             elif command.lower() == command_library.check_page_tagging:
                 # currently don't need selector but leaving temporarily just in case
-                self.funct.check_page_tagging(selector_type, selector, text_url, expected, description)
-            # elif command.lower() == command_library.check_image_tags_for_alt_text:
-            #     self.funct.check_image_tags_for_alt_text(selector_type, selector, description)
+                # self.funct.check_page_tagging(selector_type, selector, text_url, expected, description)
+                self.funct.check_page_tagging(selector_type, text_url, expected, description)
             elif command.lower() == command_library.perform_wcag_ada_checks:
                 if selector_type is not None and selector is not None:
                     print(f"In any_page selector_type = {selector_type}")
@@ -108,7 +108,8 @@ class AnyPage:
                 self.connection_string = self.funct.connect_to_database(text_url, description)
             elif command.lower() == command_library.query_database:
                 if self.connection_string is not None:
-                    data = self.funct.get_data_using_sql_alchemy(text_url,self.connection_string, description,False)
+                    # data = self.funct.get_data_using_sql_alchemy(text_url,self.connection_string, description,False)
+                    self.funct.get_data_using_sql_alchemy(text_url, self.connection_string, description, False)
                     # print(data)
                 else:
                     print("The Connect to Database command must be issued before the Query Database command!\nSkipping this command.")
@@ -154,5 +155,9 @@ class AnyPage:
                     print(save_status)
                 self.funct.log_equal_action("Get Web Page Elements", f"Has {text_url} elements", save_status, "Retrieve web page elements.")
             elif command.lower() == command_library.spider_site_save_urls:
-                links = self.funct.spider_site(selector_type, selector, text_url, expected, description)
+                # links = self.funct.spider_site(selector_type, selector, text_url, expected, description)
+                links = self.funct.spider_site(selector, text_url, expected, description)
+            elif command.lower() == command_library.check_response_status_code:
+                self.funct.check_response_code(text_url, expected, description)
+
         self.tear_down_before_close_driver()

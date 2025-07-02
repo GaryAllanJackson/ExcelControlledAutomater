@@ -1,0 +1,246 @@
+The xPath and Css Selectors are for URL: https://ultimateqa.com/?firstname=Gary
+Selector Type: css_selector - Selector: a
+------------------------------------------------------------------------------------------------------------------------
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/header/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > header > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_0 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_0.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_1 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_1.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_2 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_2.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_3 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_3.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_4 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_4.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_5 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_5.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_6 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_6.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_7 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_7.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_8 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_8.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_9 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_9.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_10 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_10.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_11 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_11.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_12 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_12.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_13 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_13.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='entry-featured-image-url']
+Css_Selector = a.entry-featured-image-url
+Tag_Name = a
+XPath = //html/body/div/div/div/div/article/div/div/div/div/div/div/div/div/article/h2/a
+Css_Selector = html > body > div > div > div > div > article > div > div > div > div > div > div > div > div > article > h2 > a
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_14 show-full-story et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_14.show-full-story.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //a[@class='et_pb_button et_pb_button_15 et_pb_bg_layout_light']
+Css_Selector = a.et_pb_button.et_pb_button_15.et_pb_bg_layout_light
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > a
+Tag_Name = a
+XPath = //a[@class='icon et_pb_with_border']
+Css_Selector = a.icon.et_pb_with_border
+Tag_Name = a
+XPath = //a[@class='icon et_pb_with_border']
+Css_Selector = a.icon.et_pb_with_border
+Tag_Name = a
+XPath = //a[@class='icon et_pb_with_border']
+Css_Selector = a.icon.et_pb_with_border
+Tag_Name = a
+XPath = //a[@class='icon et_pb_with_border']
+Css_Selector = a.icon.et_pb_with_border
+Tag_Name = a
+XPath = //a[@class='icon et_pb_with_border']
+Css_Selector = a.icon.et_pb_with_border
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/nav/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > nav > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/div/div/div/ul/li/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > div > div > div > ul > li > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > a
+Tag_Name = a
+XPath = //html/body/div/div/div/footer/div/div/div/div/div/div/a
+Css_Selector = html > body > div > div > div > footer > div > div > div > div > div > div > a

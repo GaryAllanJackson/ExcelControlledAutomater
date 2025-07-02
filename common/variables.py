@@ -35,3 +35,16 @@ wcag_ada_array = [
 ]
 connection_string_template = f"mssql+pyodbc://@*server*/*database*" \
     "?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server"
+
+terminal_color_red = "\033[31m"
+terminal_color_green = "\033[32m"
+terminal_color_reset = "\033[0m"
+terminal_color_blue = "\033[34m"
+
+# terminal_colors = [
+#     "red", "\033[31m"
+#     "green", "\033[32m"
+#     "yellow", "\033[33m"
+#     "blue", "\033[34m"
+#     "reset", "\033[0m"
+# ]

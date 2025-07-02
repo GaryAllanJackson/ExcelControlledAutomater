@@ -1,0 +1,24 @@
+The xPath and Css Selectors are for URL: https://automationpanda.com/2021/12/29/want-to-practice-test-automation-try-these-demo-sites/
+Selector Type: Tag_Name - Selector: h2
+------------------------------------------------------------------------------------------------------------------------
+Tag_Name = h2
+XPath = //h2[@class='site-description']
+Css_Selector = h2.site-description
+Tag_Name = h2
+XPath = //h2[@id='which-demo-sites-are-good']
+Css_Selector = h2#which-demo-sites-are-good
+Tag_Name = h2
+XPath = //h2[@id='which-ones-do-you-recommend-most']
+Css_Selector = h2#which-ones-do-you-recommend-most
+Tag_Name = h2
+XPath = //h2[@id='why-bother-with-fake-sites']
+Css_Selector = h2#why-bother-with-fake-sites
+Tag_Name = h2
+XPath = //h2[@id='what-limitations-do-demo-sites-have']
+Css_Selector = h2#what-limitations-do-demo-sites-have
+Tag_Name = h2
+XPath = //h2[@id='other-great-lists']
+Css_Selector = h2#other-great-lists
+Tag_Name = h2
+XPath = //h2[@class='comments-title']
+Css_Selector = h2.comments-title

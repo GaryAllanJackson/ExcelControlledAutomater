@@ -6,6 +6,7 @@ from urllib.parse import urlparse, parse_qs
 
 import pyautogui
 import requests
+from selenium.common import WebDriverException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common import keys
 from selenium.webdriver.common.by import By
@@ -16,7 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from common import variables, command_library
 import pandas
-import pyodbc
+# import pyodbc
 from sqlalchemy import create_engine, text
 
 import sys
@@ -27,9 +28,9 @@ from common.web_scraper import WebScraper
 
 @contextlib.contextmanager
 def suppress_stderr():
-    with open(os.devnull, 'w') as fnull:
+    with open(os.devnull, 'w') as f_null:
         stderr = sys.stderr
-        sys.stderr = fnull
+        sys.stderr = f_null
         try:
             yield
         finally:
@@ -58,10 +59,12 @@ class Functions:
         self.driver.get(page_url)
         time.sleep(3)
         self.log_equal_action("navigate", page_url, self.driver.current_url, description)
+        print(f"page_url: {page_url}")
+        print(f"Current_url: {self.driver.current_url}")
         assert page_url == self.driver.current_url, "Navigation Failed!"
 
     def navigate_without_checking(self, page_url, description):
-        print(f"Navigating to {page_url}")
+        print(f"{variables.terminal_color_blue} Navigating to {page_url}{variables.terminal_color_reset}")
         if variables.unsecure_protocol in self.driver.current_url or variables.secure_protocol in self.driver.current_url:
             try:
                 self.get_har_file_for_tag_information()
@@ -404,11 +407,15 @@ class Functions:
             try:
                 sheet.cell(row, 7).value = self.driver.current_url
             except Exception as e:
-                print(f"Error getting current_url: {e}")
+                print(f"{variables.terminal_color_red}Error getting current_url: {e}{variables.terminal_color_reset}")
                 sheet.cell(row, 7).value = "Error getting current_url"
         workbook.save(self.log_file_name)
         print("-" * variables.dash_length)
-        print(f"Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True,description)}\t|\tStatus:{status}")
+        # print(f"Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True, description)}\t|\tStatus:{status}")
+        if status == "Pass":
+            print(f"{variables.terminal_color_green}Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True,description)}\t|\tStatus:{status}{variables.terminal_color_reset}")
+        else:
+            print(f"{variables.terminal_color_red}Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True, description)}\t|\tStatus:{status}{variables.terminal_color_reset}")
         print("-" * variables.dash_length)
 
     def log_contains_action(self, action, expected, actual, description):
@@ -455,11 +462,11 @@ class Functions:
         return row
 
     @staticmethod
-    def get_print_spacing(is_action, text):
+    def get_print_spacing(is_action, in_text):
         min_action_len = 25
         min_desc_len = 50
-        action_spaces = (min_action_len - len(text)) * "."
-        desc_spaces = (min_desc_len - len(text)) * "."
+        action_spaces = (min_action_len - len(in_text)) * "."
+        desc_spaces = (min_desc_len - len(in_text)) * "."
         if is_action:
             return action_spaces
         else:
@@ -710,12 +717,13 @@ class Functions:
 
 
     # This is just an idea at this point but the gist is this:
-    # the selector_type has a tag type, ie..GA4, TikTok, facebook, pinterest
-    # the selector field has a comma delimited string containing values to
+    # the selector_type has a tag type, i.e.: GA4, TikTok, facebook, pinterest
+    # the selector field has a comma-delimited string containing values to
     # check for so this loops through the har_content and searches for the
-    # information.  The expected field contains a comma delimited list of
+    # information.  The expected field contains a comma-delimited list of
     # tag parameters to match against and the text_url field is the har_content or har file.
-    def check_page_tagging(self, selector_type, selector, text_url, expected, description):
+    # def check_page_tagging(self, selector_type, selector, text_url, expected, description):
+    def check_page_tagging(self, selector_type, text_url, expected, description):
         if text_url is not None and len(text_url) > 1 and os.path.exists(text_url):
             har_contents = ""
             file = open(text_url,"r")
@@ -733,15 +741,12 @@ class Functions:
         ar_expected = expected.split(",")
         items = len(ar_expected)
         found = 0
-        # selector_found = 0
         for har_entry in ar_har:
             # print(f"Checking har Entry: {har_entry} for selector_type: {selector_type}")
             if selector_type in har_entry:
                 for exp in ar_expected:
                     # remove any spaces in the search expression which should be key=value
                     exp = exp.replace(' ', '')
-                    # print(f"Checking har Entry: {har_entry} \n\tfound selector_type: {selector_type} searching for value: {exp}")
-                    # print(f"Checking har Entry for value {exp}")
                     if exp in har_entry:
                         found = found + 1
                         print(f"Found selector_type: {selector_type} and value: {exp}")
@@ -835,7 +840,7 @@ class Functions:
         if selector_type is not None:
             print(selector_type, selector, is_array)
             elements = self.get_elements(selector_type, selector)
-            if is_array == False:
+            if not is_array:
                 items = expected.split(",")
             else:
                 items = expected
@@ -866,8 +871,8 @@ class Functions:
                             if not message_printed:
                                 print(f"Checking for invalid text: {item}")
                                 message_printed = True
-                            text = self.get_element_text_silently(element)
-                            if text.lower() == item.lower():
+                            check_text = self.get_element_text_silently(element)
+                            if check_text.lower() == item.lower():
                                 print(f"Element has invalid text: {item}: {element.get_attribute('outerHTML')}")
                                 missing_param_count = missing_param_count - 1
 
@@ -875,7 +880,8 @@ class Functions:
 
     # Placed all save file type updating for directory information into a single method
     # where the file_type parameter determines where the file will be saved
-    def update_file_name(self, file_name, file_type):
+    @staticmethod
+    def update_file_name(file_name, file_type):
         if file_type.lower() == "har" and ":" not in file_name and "har_files/" not in file_name:
             if file_name is None or len(file_name) <= 0:
                 now = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
@@ -939,9 +945,10 @@ class Functions:
         else:
             return "Fail"
 
-    def read_excel_command_file(self, verbose = True):
+    def read_excel_command_file(self, test_file = None, verbose = True):
         if verbose:
             print(f"Reading Commands File:{self.command_file}")
+        self.command_file = test_file if test_file is not None else self.command_file
         workbook = openpyxl.load_workbook(self.command_file)
         sheet = workbook[self.command_sheet]
         self.data = []
@@ -959,7 +966,7 @@ class Functions:
     # Checks if there is a Save complete har file command, if found returns True, else False
     def check_save_complete_har_file(self):
         self.has_save_complete = False
-        command_list = self.read_excel_command_file(False)
+        command_list = self.read_excel_command_file(self.command_file, False)
         for command, selector_type, selector, text_url, expected, actual, description in command_list:
             if command.lower() == command_library.save_complete_har_file:
                 self.has_save_complete = True
@@ -999,6 +1006,10 @@ class Functions:
         connection_string = variables.connection_string_template.replace("*server*", server).replace("*database*", database)
         print(f"connection_string = {connection_string}")
         self.engine = create_engine(connection_string)
+        status = False
+        if self.engine is not None:
+            status = True
+        self.log_equal_action("Database Connection", str(True), str(status), description)
         return connection_string
 
     def get_data_using_sql_alchemy(self, sql_query, connection_string, description, show_data = False):
@@ -1021,7 +1032,7 @@ class Functions:
                         print("-" * 100)
                 status = True if data is not None else False
                 self.log_equal_action("Query Database", str(True), str(status), description)
-                return data
+                # return data
 
 
 
@@ -1055,15 +1066,34 @@ class Functions:
             else:
                 current_index += 1
         print(f"index = {index} and current_index = {current_index}")
-        self.driver.switch_to.window(win_handle[int(index)])
-        print(f"switched to tab to close")
-        self.driver.close()
-        print(f"closed tab")
+        # status = False
+        try:
+            self.driver.switch_to.window(win_handle[int(index)])
+            print(f"switched to tab to close")
+            self.driver.close()
+            print(f"closed tab")
+            status = True
+        except WebDriverException as w:
+            status = False
+            print(f"Closed Tab WebDriverException {w}")
+        except Exception as e:
+            status = False
+            print(f"Closed Tab Exception {e}")
         self.driver.switch_to.window(win_handle[current_index])
+        self.log_equal_action("Close Tab", str(True), str(status), description)
 
-    def spider_site(self, selector_type, selector, text_url, expected, description):
+    # This method begins with the url provided in the text_url parameter,
+    # gets a list of all a tag elements, gets the domain value from the
+    # text_url parameter, loops through those links calling a method to
+    # retrieve site URLs from the element hrefs, and add to the list of
+    # links and when done navigating all pages, saves the list to a
+    # text file provided by the expected field, or it alters the URL to
+    # make a valid file name.
+    # NOTE: if a selector is provided to narrow down
+    # the type of links returned, it is used, else all a tags are retrieved.
+    # def spider_site(self, selector_type, selector, text_url, expected, description):
+    def spider_site(self, selector, text_url, expected, description):
         links = []
-        # file_content = ""
         status = "No Links"
         nav_description = "Spidering Site"
         domain = urlparse(text_url).netloc
@@ -1088,12 +1118,15 @@ class Functions:
                 self.wps.save_to_file(file_name,file_content)
             else:
                 status = "No Links"
-        except:
+        except Exception as e:
             file_content = ','.join(links).replace(',', '\n')
             self.wps.save_to_file(file_name, file_content)
-            print("In Spider Exception")
+            print(f"Spider Exception: {e}")
         self.log_equal_action("Spider Site", "Links",status, description)
 
+    # This method gets all link href urls from all a tag elements passed in,
+    # if they match the domain, do not contain javascript and do not contain mailto
+    # and returns the list of links to the calling method
     def get_all_hrefs(self, elements, links, domain):
         link_exists = False
         for element in elements:
@@ -1108,3 +1141,12 @@ class Functions:
                     links.append(element.get_attribute("href"))
             link_exists = False
         return links
+
+    def check_response_code(self, page_url, expected, description):
+        if expected is None:
+            expected = "200"
+        response = requests.get(page_url)
+        time.sleep(2)
+        print(f" Status Code: Expected: {expected} Actual: {response.status_code}")
+        actual = str(response.status_code)
+        self.log_equal_action("Check Response Code", expected, actual, description)
