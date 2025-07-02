@@ -17,6 +17,12 @@ class AnyPage:
         self.wps = WebScraper()
         self.web_page = None
 
+    def tear_down_before_close_driver(self):
+        has_save_complete = self.funct.check_save_complete_har_file()
+        # print(f"has_save_complete = {has_save_complete}")
+        if not has_save_complete:
+            self.funct.get_har_file_for_tag_information()
+        self.funct.log_equal_action("Close Driver", "n/a", "n/a", "Closing Driver")
 
     def any_page(self):
         # self.funct.get_second_highest_number_from_array()
@@ -147,3 +153,6 @@ class AnyPage:
                     save_status = "Error, page must first be retrieved!!!"
                     print(save_status)
                 self.funct.log_equal_action("Get Web Page Elements", f"Has {text_url} elements", save_status, "Retrieve web page elements.")
+            elif command.lower() == command_library.spider_site_save_urls:
+                links = self.funct.spider_site(selector_type, selector, text_url, expected, description)
+        self.tear_down_before_close_driver()

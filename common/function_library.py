@@ -22,6 +22,9 @@ from sqlalchemy import create_engine, text
 import sys
 import contextlib
 
+from common.web_scraper import WebScraper
+
+
 @contextlib.contextmanager
 def suppress_stderr():
     with open(os.devnull, 'w') as fnull:
@@ -45,6 +48,9 @@ class Functions:
         self.har_file_contents = ""
         self.has_save_complete = False
         self.engine = None
+        self.wps = WebScraper()
+
+
 
     def navigate(self, page_url, description):
         if variables.unsecure_protocol in self.driver.current_url or variables.secure_protocol in self.driver.current_url:
@@ -52,8 +58,18 @@ class Functions:
         self.driver.get(page_url)
         time.sleep(3)
         self.log_equal_action("navigate", page_url, self.driver.current_url, description)
-
         assert page_url == self.driver.current_url, "Navigation Failed!"
+
+    def navigate_without_checking(self, page_url, description):
+        print(f"Navigating to {page_url}")
+        if variables.unsecure_protocol in self.driver.current_url or variables.secure_protocol in self.driver.current_url:
+            try:
+                self.get_har_file_for_tag_information()
+            except:
+                print(f"No har information for {self.driver.current_url}")
+        self.driver.get(page_url)
+        time.sleep(3)
+        self.log_equal_action("navigate - no check", page_url, self.driver.current_url, description)
 
     def perform_click(self, accessor_type, accessor, expected, actual, description):
         element = self.get_element(accessor_type, accessor)
@@ -385,7 +401,11 @@ class Functions:
             self.set_close_driver_theme(sheet, row)
             print("\n")
         else:
-            sheet.cell(row, 7).value = self.driver.current_url
+            try:
+                sheet.cell(row, 7).value = self.driver.current_url
+            except Exception as e:
+                print(f"Error getting current_url: {e}")
+                sheet.cell(row, 7).value = "Error getting current_url"
         workbook.save(self.log_file_name)
         print("-" * variables.dash_length)
         print(f"Action: {action}{self.get_print_spacing(True, action)}\t|\tDescription:{description}{self.get_print_spacing(True,description)}\t|\tStatus:{status}")
@@ -750,57 +770,57 @@ class Functions:
         # status = True if missing_alt_count == 0 else False
         self.log_equal_action(f"Image Alt Tag Check", str(total_count), str(missing_alt_count), description)
 
-    def wcag_ada_check_controller_old(self, description):
-        # overall selector_type
-        selector_type = "css_selector"
-        # image element
-        selector = variables.wcag_ada_img[0]
-        expected = variables.wcag_ada_img[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # wcag_ada_button element
-        selector = variables.wcag_ada_button[0]
-        expected = variables.wcag_ada_button[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # nav element
-        selector = variables.wcag_ada_nav[0]
-        expected = variables.wcag_ada_nav[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # section element
-        selector = variables.wcag_ada_section[0]
-        expected = variables.wcag_ada_section[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # form element
-        selector = variables.wcag_ada_form[0]
-        expected = variables.wcag_ada_form[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # table
-        selector = variables.wcag_ada_table[0]
-        expected = variables.wcag_ada_table[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        #th element
-        selector = variables.wcag_ada_th[0]
-        expected = variables.wcag_ada_th[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # iframe element
-        selector = variables.wcag_ada_iframe[0]
-        expected = variables.wcag_ada_iframe[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # svg element
-        selector = variables.wcag_ada_svg[0]
-        expected = variables.wcag_ada_svg[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # video element
-        selector = variables.wcag_ada_video[0]
-        expected = variables.wcag_ada_video[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # source element
-        selector = variables.wcag_ada_video_source[0]
-        expected = variables.wcag_ada_video_source[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
-        # track element
-        selector = variables.wcag_ada_video_track[0]
-        expected = variables.wcag_ada_video_track[1:]
-        self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    # def wcag_ada_check_controller_old(self, description):
+    #     # overall selector_type
+    #     selector_type = "css_selector"
+    #     # image element
+    #     selector = variables.wcag_ada_img[0]
+    #     expected = variables.wcag_ada_img[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # wcag_ada_button element
+    #     selector = variables.wcag_ada_button[0]
+    #     expected = variables.wcag_ada_button[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # nav element
+    #     selector = variables.wcag_ada_nav[0]
+    #     expected = variables.wcag_ada_nav[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # section element
+    #     selector = variables.wcag_ada_section[0]
+    #     expected = variables.wcag_ada_section[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # form element
+    #     selector = variables.wcag_ada_form[0]
+    #     expected = variables.wcag_ada_form[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # table
+    #     selector = variables.wcag_ada_table[0]
+    #     expected = variables.wcag_ada_table[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     #th element
+    #     selector = variables.wcag_ada_th[0]
+    #     expected = variables.wcag_ada_th[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # iframe element
+    #     selector = variables.wcag_ada_iframe[0]
+    #     expected = variables.wcag_ada_iframe[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # svg element
+    #     selector = variables.wcag_ada_svg[0]
+    #     expected = variables.wcag_ada_svg[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # video element
+    #     selector = variables.wcag_ada_video[0]
+    #     expected = variables.wcag_ada_video[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # source element
+    #     selector = variables.wcag_ada_video_source[0]
+    #     expected = variables.wcag_ada_video_source[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # track element
+    #     selector = variables.wcag_ada_video_track[0]
+    #     expected = variables.wcag_ada_video_track[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
 
     def wcag_ada_check_controller(self, description):
         selector_type = "css_selector"
@@ -1006,7 +1026,8 @@ class Functions:
 
 
     def __del__(self):
-        self.engine
+        pass
+        # self.engine
 
     def perform_right_click(self, selector_type, selector, description):
         # action_chains = ActionChains(self.driver)
@@ -1039,3 +1060,51 @@ class Functions:
         self.driver.close()
         print(f"closed tab")
         self.driver.switch_to.window(win_handle[current_index])
+
+    def spider_site(self, selector_type, selector, text_url, expected, description):
+        links = []
+        # file_content = ""
+        status = "No Links"
+        nav_description = "Spidering Site"
+        domain = urlparse(text_url).netloc
+        file_name = expected if expected is not None else text_url
+        self.navigate(text_url, nav_description)
+        links.append(text_url)
+        time.sleep(3)
+        accessor_type = "tag_name"
+        accessor = "a" if selector is None else selector
+        try:
+            elements = self.get_elements(accessor_type, accessor)
+            links = self.get_all_hrefs(elements, links, domain)
+            for link in links:
+                print(f"In for loop going to {link}")
+                self.navigate_without_checking(link,nav_description)
+                time.sleep(3)
+                elements = self.get_elements(accessor_type, accessor)
+                links = self.get_all_hrefs(elements, links, domain)
+            if len(links) > 0:
+                status = "Links"
+                file_content = ','.join(links).replace(',','\n')
+                self.wps.save_to_file(file_name,file_content)
+            else:
+                status = "No Links"
+        except:
+            file_content = ','.join(links).replace(',', '\n')
+            self.wps.save_to_file(file_name, file_content)
+            print("In Spider Exception")
+        self.log_equal_action("Spider Site", "Links",status, description)
+
+    def get_all_hrefs(self, elements, links, domain):
+        link_exists = False
+        for element in elements:
+            href = element.get_attribute("href") if element.get_attribute("href") is not None else None
+            print(f"href = {href}")
+            if href is not None and href.find(domain) >= 0 > href.lower().find(
+                    'javascript') and href.lower().find('mailto:') < 0:
+                for link in links:
+                    if href == link:
+                        link_exists = True
+                if not link_exists:
+                    links.append(element.get_attribute("href"))
+            link_exists = False
+        return links

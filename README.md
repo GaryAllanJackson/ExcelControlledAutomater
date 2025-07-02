@@ -46,10 +46,13 @@ Wait                                    |Wait a specified time in seconds       
 Wait for clickable element              |Wait for the element based on the selector type and selector, to be clickable                                              |20                                      |
 Wait for element presence               |Wait up to 20 seconds for the presence of an element based on the selector type and selector                               |20                                      |
 Retrieve Web Page                       |Retrieves Web Page HTML based on text_url field                                                                            |https://www.mycoolsite.com/             |
-Retrieve Elements and List Properties   |Returns all elements based on selector from Retrieved Web page, prints properties.                                         |src,alt,srcset                          |
+Retrieve Elements-List Properties       |Gets Retrieved page elements based on selector. Prints properties.                                                         |src,alt,srcset                          |
 Save Web Page                           |Saves Web page retrieved or retrieves and saves it.                                                                        |https://www.mycoolsite.com/             |
+Spider Site Save URLs                   |Spiders the site collecting all hrefs and building a list of links to save to a file.                                      |https://www.mycoolsite.com/             |
 Reset Sheet                             |Clears the Commands Sheet                                                                                                  |                                        |
                                         |                                                                                                                           |                                        |
+                                        |                                                                                                                           |                                        |
+
 ----------------------------------------------------------------------------------------------------------------
 Sample Excel CommandScripts.xlsx file.  Tab must be named CommandScripts.
 Simple rule to remember, if you are interacting with an element, you must provided the Selector_type and Selector for that element.
@@ -95,3 +98,4 @@ Query Database                    |                |                            
 Retrieve Web Page                 |                |                                   |https://mycoolsite.com/                |                              |      |Retrieves Web Page HTML based on text_url field                   | 
 Save Web Page                     |                |                                   |https://mycoolsite.com/                |                              |      |Saves/Retrieves Web page to data folder with valid name from URL. |
 Retrieve Elements-List Properties |tag_name        |img                                |src,alt,srcset                         |TRUE                          |      |Gets Retrieved page elements based on selector. Prints properties.|
+Spider Site Save URLs             |                |                                   |https://mycoolsite.com/                |mycool_site_links.txt         |      |Spiders site gets all hrefs and saves them to a file.             |

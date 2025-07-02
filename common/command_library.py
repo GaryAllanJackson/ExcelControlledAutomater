@@ -34,5 +34,6 @@ query_database = "query database"
 retrieve_web_page = "retrieve web page"
 save_web_page = "save web page"
 retrieve_elements_and_list_properties = "retrieve elements-list properties"
+spider_site_save_urls = "spider site save urls"
 
 
