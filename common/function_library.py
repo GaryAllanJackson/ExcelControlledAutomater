@@ -50,6 +50,7 @@ class Functions:
         self.has_save_complete = False
         self.engine = None
         self.wps = WebScraper()
+        self.check_response_url = ""
 
 
 
@@ -405,7 +406,12 @@ class Functions:
             print("\n")
         else:
             try:
-                sheet.cell(row, 7).value = self.driver.current_url
+                if self.driver.current_url != "data:,":
+                    sheet.cell(row, 7).value = self.driver.current_url
+                elif self.check_response_url is not None and len(self.check_response_url) > 0:
+                    sheet.cell(row, 7).value = self.check_response_url
+                else:
+                    sheet.cell(row, 7).value = "Non-Site Related Command"
             except Exception as e:
                 print(f"{variables.terminal_color_red}Error getting current_url: {e}{variables.terminal_color_reset}")
                 sheet.cell(row, 7).value = "Error getting current_url"
@@ -1149,4 +1155,6 @@ class Functions:
         time.sleep(2)
         print(f" Status Code: Expected: {expected} Actual: {response.status_code}")
         actual = str(response.status_code)
+        self.check_response_url = page_url
         self.log_equal_action("Check Response Code", expected, actual, description)
+        self.check_response_url = ""
