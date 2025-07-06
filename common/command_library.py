@@ -36,5 +36,6 @@ save_web_page = "save web page"
 retrieve_elements_and_list_properties = "retrieve elements-list properties"
 spider_site_save_urls = "spider site save urls"
 check_response_status_code = "check response status code"
+check_response_status_codes = "check response status codes"
 
 

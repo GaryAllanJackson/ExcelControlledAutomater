@@ -26,6 +26,7 @@ Actions                                 |Description                            
 Navigate                                |Navigate to URL                                                                                                            |Page URL                                |
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
 Check Response Status Code              |Checks the response status code (100s=info,200s=Successful,300s=Redirect,400s=Client Error,500s=Server Error)              |https://www.mycoolsite.com/             |
+Check Response Status Codes             |Checks file of links for response status codes.                                                                            |my_url_list.txt                         |
 Click                                   |Clicks the element based on the selector type and selector                                                                 |                                        |
 Close tab                               |Closes an open tab                                                                                                         |1                                       |
 Compare Text                            |Compares element text, based on the selector type and selector, against last Get Text that was saved                       |                                        |
@@ -109,3 +110,4 @@ Save Web Page                     |                |                            
 Retrieve Elements-List Properties |tag_name        |img                                |src,alt,srcset                         |TRUE                          |      |Gets Retrieved page elements based on selector. Prints properties.|
 Spider Site Save URLs             |                |                                   |https://mycoolsite.com/                |my_cool_site_links.txt        |      |Spiders site gets all hrefs and saves them to a file.             |
 Check Response Status Code        |                |                                   |https://mycoolsite.com/                |200                           |      |Checks the response status code.                                  |
+Check Response Status Codes       |                |                                   |my_url_list.txt                        |200                           |      |Checks file of links for response status codes.                   |

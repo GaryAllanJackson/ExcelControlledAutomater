@@ -1151,10 +1151,49 @@ class Functions:
     def check_response_code(self, page_url, expected, description):
         if expected is None:
             expected = "200"
-        response = requests.get(page_url)
-        time.sleep(2)
-        print(f" Status Code: Expected: {expected} Actual: {response.status_code}")
-        actual = str(response.status_code)
+        try:
+            response = requests.get(page_url)
+            time.sleep(2)
+            print(f" Status Code: Expected: {expected} Actual: {response.status_code}")
+            actual = str(response.status_code)
+        except requests.exceptions.RequestException as r:
+            actual = "Exception"
+            print(f" Status Code: Expected: {expected} Actual: {variables.terminal_color_red} {actual}: {r} {variables.terminal_color_reset}")
         self.check_response_url = page_url
         self.log_equal_action("Check Response Code", expected, actual, description)
         self.check_response_url = ""
+
+    def check_response_codes(self, text_url, expected, description):
+        if ".txt" in text_url:
+            data = self.read_text_file(text_url)
+        elif ".xlsx" in text_url:
+            data = self.read_excel_data_file(text_url)
+        else:
+            print("No method exists for reading this type of file!  \nMake a .txt or .xlsx file to use this command.")
+            return
+        for item in data:
+            print(f"Check response code for:{item}")
+            if expected is None:
+                expected = "200"
+            self.check_response_code(item, expected, description)
+
+
+    def read_text_file(self, text_url):
+        data = []
+        if not "\\" in text_url and not "/" in text_url:
+            text_url = "./data/" + text_url
+
+        with open(text_url, 'r') as file:
+            for line in file:
+                if line is not None and len(line) > 0:
+                    data.append(line)
+                    # print(f"line = {line}")
+        return data
+
+    #
+    #
+
+    def read_excel_data_file(self, text_url):
+        pass
+
+

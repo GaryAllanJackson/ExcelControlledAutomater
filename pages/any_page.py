@@ -159,5 +159,6 @@ class AnyPage:
                 links = self.funct.spider_site(selector, text_url, expected, description)
             elif command.lower() == command_library.check_response_status_code:
                 self.funct.check_response_code(text_url, expected, description)
-
+            elif command.lower() == command_library.check_response_status_codes:
+                self.funct.check_response_codes(text_url, expected, description)
         self.tear_down_before_close_driver()
