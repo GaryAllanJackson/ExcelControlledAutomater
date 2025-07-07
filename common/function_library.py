@@ -1177,7 +1177,8 @@ class Functions:
                 expected = "200"
             self.check_response_code(item, expected, description)
 
-
+    # This method reads URLs from a Text file
+    # and returns a list to the calling method
     def read_text_file(self, text_url):
         data = []
         if not "\\" in text_url and not "/" in text_url:
@@ -1190,10 +1191,18 @@ class Functions:
                     # print(f"line = {line}")
         return data
 
-    #
-    #
-
+    # This method reads URLs from an Excel file
+    # and returns a list to the calling method
     def read_excel_data_file(self, text_url):
-        pass
-
-
+        if not "\\" in text_url and not "/" in text_url:
+            text_url = "./data/" + text_url
+        print(f"in read_excel_data_file - text_url = {text_url}")
+        workbook = openpyxl.load_workbook(text_url)
+        sheet = workbook.worksheets[0]
+        print(f"Attempting to read worksheet: {sheet.title}")
+        data = []
+        for row in range(1, sheet.max_row + 1):
+            line = sheet.cell(row, 1).value
+            if line is not None and len(line) > 0:
+                data.append(line)
+        return data

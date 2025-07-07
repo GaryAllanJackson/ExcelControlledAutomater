@@ -38,10 +38,10 @@ Get Text                                |Gets the element text based on the sele
 Hover                                   |Hovers over the element based on the selector type and selector                                                            |                                        |
 Open link in new tab                    |Opens link url in new tab based on the parent selector type and selector                                                   |                                        |
 Perform WCAG ADA Checks                 |Checks all WCAG and ADA HTML elements with no selector type and selector or just elements indicated                        |                                        |
-Print All Elements                      |Prints the text of all child elements based on the parent selector type and selector                                       |Print Child element values              |
+Print All Elements                      |Prints the text of all elements based on the selector type and selector                                                    |Print element text values               |
 Print Child Elements                    |Prints the text of all child elements based on the parent selector type and selector                                       |Print Child element values              |
 Print Step Description                  |Prints the text provided to the output                                                                                     |Phrase to print                         |
-Query Database                          |Write a SQL Query to return results                                                                                        |Select * from myTable where Id = 1      |
+Query Database                          |Executes a SQL Query to return results                                                                                     |Select * from myTable where Id = 1      |
 Refresh                                 |Refreshes the page resetting controls to initial values                                                                    |                                        |
 Right Click                             |Right Clicks the element based on the selector type and selector                                                           |Not implemented                         |
 Select All Elements                     |Selects all elements based on selector type and selector                                                                   |                                        |
