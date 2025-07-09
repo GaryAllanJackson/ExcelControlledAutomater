@@ -534,6 +534,20 @@ class Functions:
         # self.log_equal_action("Get All Element xPaths & Css Selectors", str(True), str(status), description)
         self.log_equal_action("Get xPaths & Css Selectors", str(True), str(status), description)
 
+    def get_element_xpath(self, element):
+        if element.get_attribute("id") is not None and len(element.get_attribute("id")) > 0:
+            xpath = f"//{element.tag_name}" + "[@id='" + element.get_attribute("id") + "']"
+        else:
+            parent = element.find_element(By.XPATH, "..")
+            xpath = element.tag_name
+            while parent is not None:
+                xpath = parent.tag_name + "/" + xpath
+                if parent.tag_name == "html":
+                    break
+                parent = parent.find_element(By.XPATH, "..")
+            xpath = "//" + xpath
+        return xpath
+
     # This method prints all table information based on the accessor_type and accessor, but
     # can also change the display orientation based on the text/URL value.
     # The default orientation is vertical.

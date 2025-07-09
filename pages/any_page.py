@@ -1,3 +1,4 @@
+from common.create_test_file import CreateTestFile
 from common.function_library import Functions
 from common import command_library
 from common.web_scraper import WebScraper
@@ -161,4 +162,7 @@ class AnyPage:
                 self.funct.check_response_code(text_url, expected, description)
             elif command.lower() == command_library.check_response_status_codes:
                 self.funct.check_response_codes(text_url, expected, description)
+            elif command.lower() == command_library.create_test_file:
+                ctf = CreateTestFile(self.funct)
+                ctf.create_test_file_controller(selector_type, selector, text_url, expected, description)
         self.tear_down_before_close_driver()

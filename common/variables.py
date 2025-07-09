@@ -10,6 +10,12 @@ google_analytics_identifier = "www.google-analytics.com/"
 unsecure_protocol = "http://"
 secure_protocol = "https://"
 dash_length = 120
+media_tags = [
+    ["tiktok", "sdkid"],
+    ["facebook", "ev", "id"],
+    ["snapchat", "pid"],
+    ["pinterest", "tid", "dep"]
+]
 
 # This array is for testing WCAG and ADA compliance
 # The first item of each array is the element, items without <> surrounding them are parameters
