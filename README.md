@@ -31,6 +31,7 @@ Click                                   |Clicks the element based on the selecto
 Close tab                               |Closes an open tab                                                                                                         |1                                       |
 Compare Text                            |Compares element text, based on the selector type and selector, against last Get Text that was saved                       |                                        |
 Connect to Database                     |Provide Server Name and Database Name                                                                                      |Server=ServerName, Database=DatabaseName|
+Create Test File                        |Creates a test file based on the selector type and selector or all elements if omitted                                     |new_test_file.xlsx
 Get all xpath and css selectors         |Prints all element xPath and Css Selector values based on selector type and selector and saves them to the specified file  |File Path and File Name                 |
 Get JSON from API                       |Gets JSON from the API endpoint                                                                                            |                                        |
 Get table information                   |Prints table information based on the selector type and selector in vertical or horizontal orientation                     |Horizontal or Vertical print orientation|
@@ -111,3 +112,4 @@ Retrieve Elements-List Properties |tag_name        |img                         
 Spider Site Save URLs             |                |                                   |https://mycoolsite.com/                |my_cool_site_links.txt        |      |Spiders site gets all hrefs and saves them to a file.             |
 Check Response Status Code        |                |                                   |https://mycoolsite.com/                |200                           |      |Checks the response status code.                                  |
 Check Response Status Codes       |                |                                   |my_url_list.txt                        |200                           |      |Checks file of links for response status codes.                   |
+Create Test File                  |                |                                   |new_test_file.xlsx                     |                              |      |Makes test of all elements if no selector type & selector provided|
