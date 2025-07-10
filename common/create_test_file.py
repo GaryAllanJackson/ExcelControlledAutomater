@@ -1,4 +1,5 @@
 import os
+import random
 import time
 
 import openpyxl
@@ -32,7 +33,7 @@ class CreateTestFile:
         self.check_for_one_trust_consent()
         self.create_screenshot_command()
         self.create_wcag_command(self.funct.driver.current_url)
-        element = ""
+        element = None
         try:
             elements = self.funct.get_elements(accessor_type, accessor)
             for element in elements:
@@ -47,6 +48,11 @@ class CreateTestFile:
                             self.create_command_send_keys(element)
                         except ElementNotInteractableException as i:
                             print(f"Element {element.tag_name} - {element} is not interactable, skipping.")
+                    elif element.tag_name == "input" and (element.get_attribute("type") == "checkbox" or element.get_attribute("type") == "radio"):
+                        self.create_click_command(element)
+                        print(f"Tag Type: {element.tag_name}\nType:{element.get_attribute("type")}")
+                    elif element.tag_name == "select":
+                        self.create_select_command(element)
                     elif element.tag_name == "img":
                         self.create_command_check_response_code(element)
                         print(f"Tag Type: {element.tag_name}\n{element.get_attribute('src')}")
@@ -66,7 +72,7 @@ class CreateTestFile:
             if element is not None:
                 tag_name = element.tag_name
             else:
-                tag_name = "Tag Name unretrievable"
+                tag_name = "Tag Name irretrievable"
             print(f"Error attempting to create command for tag_name:{tag_name}\n{e}")
                 # print(f"Command:Check Response Status Code, Selector_Type: {element.tag_name}, Selector: {element.get_attribute('href')}")
                 # print(f"Tag Type: {element.tag_name}\n{element.get_attribute('outerHTML')}")
@@ -195,6 +201,19 @@ class CreateTestFile:
         except Exception as e:
             print(f"Error in check for one trust consent method:\n{e}")
 
+    def create_click_command(self, element):
+        command = "Click"
+        selector_type = "xpath"
+        selector = self.funct.get_element_xpath(element)
+        text_url = ""
+        expected = ""
+        actual = ""
+        if element.get_attribute("type") == "checkbox":
+            description = "Click checkbox option"
+        else:
+            description = "Click radio option"
+        self.write_command_to_file(command, selector_type, selector, text_url, expected, actual, description)
+
     def check_for_analytics_tagging(self):
         har_content = self.funct.har_file_contents
         if variables.ga4_analytics_identifier in har_content and variables.google_analytics_identifier in har_content:
@@ -260,3 +279,18 @@ class CreateTestFile:
         actual = ""
         description = f"Screenshot of {self.file_name}"
         self.write_command_to_file(command, selector_type, selector, text_url, expected, actual, description)
+
+    def create_select_command(self, element):
+        options = element.find_elements("tag name", "option")
+        random_option = random.choice(options)
+        command = "Select Dropdown By Value"
+        text_url = random_option.get_attribute('value')
+        selector_type = "xpath"
+        selector = self.funct.get_element_xpath(element)
+        expected = random_option.text
+        actual = ""
+        description = f"Select random dropdown option: ({expected})"
+        self.write_command_to_file(command, selector_type, selector, text_url, expected, actual, description)
+
+
+

@@ -729,9 +729,10 @@ class Functions:
                     if tracking_id is not None:
                         print(f"Tracking Id:{tracking_id} - Event Name: {event_name} - Hit Type:{hit_type} - Document Location:{document_location}")
                     status = True
+            self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
         else:
             print("No GA4 Analytics Tags Found")
-        self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
+        # self.log_equal_action("GA4 Analytics Tags Found", str(True), str(status), description)
 
 
 
