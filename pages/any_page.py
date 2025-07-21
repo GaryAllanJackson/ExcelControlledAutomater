@@ -165,4 +165,6 @@ class AnyPage:
             elif command.lower() == command_library.create_test_file:
                 ctf = CreateTestFile(self.funct)
                 ctf.create_test_file_controller(selector_type, selector, text_url, expected, description)
+            elif command.lower() == command_library.check_font_information:
+                self.funct.check_all_font_information(selector_type, selector, text_url, expected, description)
         self.tear_down_before_close_driver()

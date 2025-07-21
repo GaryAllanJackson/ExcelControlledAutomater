@@ -796,57 +796,6 @@ class Functions:
         # status = True if missing_alt_count == 0 else False
         self.log_equal_action(f"Image Alt Tag Check", str(total_count), str(missing_alt_count), description)
 
-    # def wcag_ada_check_controller_old(self, description):
-    #     # overall selector_type
-    #     selector_type = "css_selector"
-    #     # image element
-    #     selector = variables.wcag_ada_img[0]
-    #     expected = variables.wcag_ada_img[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # wcag_ada_button element
-    #     selector = variables.wcag_ada_button[0]
-    #     expected = variables.wcag_ada_button[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # nav element
-    #     selector = variables.wcag_ada_nav[0]
-    #     expected = variables.wcag_ada_nav[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # section element
-    #     selector = variables.wcag_ada_section[0]
-    #     expected = variables.wcag_ada_section[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # form element
-    #     selector = variables.wcag_ada_form[0]
-    #     expected = variables.wcag_ada_form[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # table
-    #     selector = variables.wcag_ada_table[0]
-    #     expected = variables.wcag_ada_table[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     #th element
-    #     selector = variables.wcag_ada_th[0]
-    #     expected = variables.wcag_ada_th[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # iframe element
-    #     selector = variables.wcag_ada_iframe[0]
-    #     expected = variables.wcag_ada_iframe[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # svg element
-    #     selector = variables.wcag_ada_svg[0]
-    #     expected = variables.wcag_ada_svg[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # video element
-    #     selector = variables.wcag_ada_video[0]
-    #     expected = variables.wcag_ada_video[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # source element
-    #     selector = variables.wcag_ada_video_source[0]
-    #     expected = variables.wcag_ada_video_source[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
-    #     # track element
-    #     selector = variables.wcag_ada_video_track[0]
-    #     expected = variables.wcag_ada_video_track[1:]
-    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
 
     def wcag_ada_check_controller(self, description):
         selector_type = "css_selector"
@@ -1163,6 +1112,7 @@ class Functions:
             link_exists = False
         return links
 
+    # This method checks the response code of the page_url passed in
     def check_response_code(self, page_url, expected, description):
         if expected is None:
             expected = "200"
@@ -1178,6 +1128,8 @@ class Functions:
         self.log_equal_action("Check Response Code", expected, actual, description)
         self.check_response_url = ""
 
+    # This method checks the response codes for a file of URLs that are
+    # either in a text file (preferred) or an Excel file.
     def check_response_codes(self, text_url, expected, description):
         if ".txt" in text_url:
             data = self.read_text_file(text_url)
@@ -1191,6 +1143,44 @@ class Functions:
             if expected is None:
                 expected = "200"
             self.check_response_code(item, expected, description)
+
+    # This method gets the font information for elements based on the
+    # selector_type and selector parameters
+    def check_all_font_information(self, selector_type, selector, text_url, expected, description):
+        expected = "n/a"
+        actual = "n/a"
+        file_content = ""
+        if selector_type is None:
+            text_elements = self.driver.find_elements(By.XPATH, "//*[normalize-space(text()) != '']")
+        else:
+            elements = self.get_elements(selector_type,selector)
+            text_elements = [el for el in elements if el.text.strip()]
+
+        if len(text_elements) <= 0:
+            actual = "None Found"
+        for elem in text_elements:
+            try:
+                font_family = elem.value_of_css_property("font-family")
+                font_size = elem.value_of_css_property("font-size")
+                font_weight = elem.value_of_css_property("font-weight")
+                text = elem.text.strip()
+                separator = "-"*60
+                weight_mapped = self.get_font_weight_mapping(font_weight)
+
+                if text:  # Skip empty strings
+                    print(f"Tag Name: {elem.tag_name}")
+                    print(f"Text: {text}")
+                    print(f"  Font Family: {font_family}")
+                    print(f"  Font Size: {font_size}")
+                    print(f"  Font Weight: {font_weight} ({weight_mapped})")
+                    print("-"*60)
+                    file_content += f"Tag Name: {elem.tag_name} \nText: {text}\n\tFont Family: {font_family}\n\tFont Size: {font_size}\n\tFont Weight: {font_weight} ({weight_mapped})\n{separator}\n"
+            except Exception as e:
+                print(f"Error reading font info: {e}")
+        if text_url is not None:
+            self.wps.save_to_file(text_url, file_content)
+        self.log_equal_action("Check Font Information", expected, actual, description)
+
 
     # This method reads URLs from a Text file
     # and returns a list to the calling method
@@ -1221,3 +1211,83 @@ class Functions:
             if line is not None and len(line) > 0:
                 data.append(line)
         return data
+
+    # This method returns the name of the font weight
+    # for the mapped font weights else Unknown
+    def get_font_weight_mapping(self, weight):
+        font_weight = int(weight)
+        if font_weight == 100:
+            weight_mapping = "Thin"
+        elif font_weight == 200:
+            weight_mapping = "Extra Light"
+        elif font_weight == 300:
+            weight_mapping = "Light"
+        elif font_weight == 400:
+            weight_mapping = "Normal"
+        elif font_weight == 500:
+            weight_mapping = "Medium"
+        elif font_weight == 600:
+            weight_mapping = "Semi Bold"
+        elif font_weight == 700:
+            weight_mapping = "Bold"
+        elif font_weight == 800:
+            weight_mapping = "Extra Bold"
+        elif font_weight == 900:
+            weight_mapping = "Heavy"
+        elif font_weight > 900:
+            weight_mapping = "Very Heavy"
+        else:
+            weight_mapping = "Unmapped"
+        return weight_mapping
+
+    # def wcag_ada_check_controller_old(self, description):
+    #     # overall selector_type
+    #     selector_type = "css_selector"
+    #     # image element
+    #     selector = variables.wcag_ada_img[0]
+    #     expected = variables.wcag_ada_img[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # wcag_ada_button element
+    #     selector = variables.wcag_ada_button[0]
+    #     expected = variables.wcag_ada_button[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # nav element
+    #     selector = variables.wcag_ada_nav[0]
+    #     expected = variables.wcag_ada_nav[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # section element
+    #     selector = variables.wcag_ada_section[0]
+    #     expected = variables.wcag_ada_section[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # form element
+    #     selector = variables.wcag_ada_form[0]
+    #     expected = variables.wcag_ada_form[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # table
+    #     selector = variables.wcag_ada_table[0]
+    #     expected = variables.wcag_ada_table[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     #th element
+    #     selector = variables.wcag_ada_th[0]
+    #     expected = variables.wcag_ada_th[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # iframe element
+    #     selector = variables.wcag_ada_iframe[0]
+    #     expected = variables.wcag_ada_iframe[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # svg element
+    #     selector = variables.wcag_ada_svg[0]
+    #     expected = variables.wcag_ada_svg[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # video element
+    #     selector = variables.wcag_ada_video[0]
+    #     expected = variables.wcag_ada_video[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # source element
+    #     selector = variables.wcag_ada_video_source[0]
+    #     expected = variables.wcag_ada_video_source[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)
+    #     # track element
+    #     selector = variables.wcag_ada_video_track[0]
+    #     expected = variables.wcag_ada_video_track[1:]
+    #     self.wcag_ada_checks(selector_type, selector, expected, description, True)

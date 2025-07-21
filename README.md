@@ -24,6 +24,7 @@ At the time of this writing, Actions in the Commands.xlsm and CommandScripts.xls
 (Descriptions listed below are more robust for general understanding.)
 Actions                                 |Description                                                                                                                |Display Value                           |
 Navigate                                |Navigate to URL                                                                                                            |Page URL                                |
+Check Font Information                  |Display/Save Font information for text elements based on selector type and selector                                        |File Name (file saved to data folder)   |
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
 Check Response Status Code              |Checks the response status code (100s=info,200s=Successful,300s=Redirect,400s=Client Error,500s=Server Error)              |https://www.mycoolsite.com/             |
 Check Response Status Codes             |Checks file of links for response status codes.                                                                            |my_url_list.txt                         |
@@ -113,4 +114,6 @@ Spider Site Save URLs             |                |                            
 Check Response Status Code        |                |                                   |https://mycoolsite.com/                |200                           |      |Checks the response status code.                                  |
 Check Response Status Codes       |                |                                   |my_url_list.txt                        |200                           |      |Checks file of links for response status codes.                   |
 Create Test File                  |                |                                   |new_test_file.xlsx                     |                              |      |Makes test of all page interactable elements (a,input,select,wcag)|
-Create Test File                  |css_selector    |input                              |new_test_file.xlsx                     |                              |      |Makes test of all input elements (a,input,select,wcag)|
+Create Test File                  |css_selector    |input                              |new_test_file.xlsx                     |                              |      |Makes test of all input elements (a,input,select,wcag)            |
+Check Font Information            |                |                                   |mysite_font_information.txt            |                              |      |Prints/Saves to data folder the Font info for all text elements   |
+Check Font Information            |css_selector    |h1, h2, h3, h4, h5, h6             |mysite_header_font_information.txt     |                              |      |Prints/Saves to data folder the Font info for all text elements   |

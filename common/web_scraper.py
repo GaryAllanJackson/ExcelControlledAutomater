@@ -33,7 +33,10 @@ class WebScraper:
     #               described by the file_name parameter.
     # ******************************************************************
     def save_to_file(self, file_name, file_content):
-        if file_name.find("http") or file_name.find(".html"):
+        print(f"file_name = {file_name}")
+        print(file_name.find("http"))
+        print(file_name.find(".html"))
+        if file_name.find("http") > -1 or file_name.find(".html") > -1:
             file_name = self.change_url_to_file_name(file_name)
         with open(".\\data\\" + file_name,"w", encoding="utf-8") as f:
             # f.write(str(soup))
