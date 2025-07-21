@@ -1178,6 +1178,8 @@ class Functions:
             except Exception as e:
                 print(f"Error reading font info: {e}")
         if text_url is not None:
+            if text_url.find("header") > -1:
+                print("file_content:\n" + file_content)
             self.wps.save_to_file(text_url, file_content)
         self.log_equal_action("Check Font Information", expected, actual, description)
 
