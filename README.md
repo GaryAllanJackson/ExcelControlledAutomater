@@ -22,7 +22,9 @@ An additional Excel file, TestLogs.xlsx, with a single Sheet entitled Logs, also
 
 At the time of this writing, Actions in the Commands.xlsm and CommandScripts.xlsx files consist of the following Commands and similar but not exact Descriptions:  
 (Descriptions listed below are more robust for general understanding.)
+========================================|===========================================================================================================================|========================================|
 Actions                                 |Description                                                                                                                |Display Value                           |
+----------------------------------------|---------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
 Navigate                                |Navigate to URL                                                                                                            |Page URL                                |
 Check Font Information                  |Display/Save Font information for text elements based on selector type and selector                                        |File Name (file saved to data folder)   |
 Check Page Tagging                      |Checks page tagging                                                                                                        |Checks page tagging                     |
@@ -32,7 +34,7 @@ Click                                   |Clicks the element based on the selecto
 Close tab                               |Closes an open tab                                                                                                         |1                                       |
 Compare Text                            |Compares element text, based on the selector type and selector, against last Get Text that was saved                       |                                        |
 Connect to Database                     |Provide Server Name and Database Name                                                                                      |Server=ServerName, Database=DatabaseName|
-Create Test File                        |Creates a test file based on the selector type and selector or all elements if selector information omitted                |new_test_file.xlsx
+Create Test File                        |Creates a test file based on the selector type and selector or all elements if selector information omitted                |new_test_file.xlsx                      |
 Get all xpath and css selectors         |Prints all element xPath and Css Selector values based on selector type and selector and saves them to the specified file  |File Path and File Name                 |
 Get JSON from API                       |Gets JSON from the API endpoint                                                                                            |                                        |
 Get table information                   |Prints table information based on the selector type and selector in vertical or horizontal orientation                     |Horizontal or Vertical print orientation|
@@ -50,7 +52,7 @@ Select All Elements                     |Selects all elements based on selector 
 Save complete har file                  |Saves one HAR file for all pages on the site and must be the last command                                                  |File Path and File Name                 |
 Save HAR file                           |Saves the HAR contents to a file                                                                                           |File Path and File Name                 |
 Select dropdown by value                |Select dropdown value based on the selector type and selector and value                                                    |                                        |
-Send Keys                               |Sends keystrokes to the element based on the selector type, selector and text to send                                       |Phrase/keys to send                     |
+Send Keys                               |Sends keystrokes to the element based on the selector type, selector and text to send                                      |Phrase/keys to send                     |
 Switch to Tab                           |Switches to a new tab based on the window index                                                                            |1                                       |
 Take Screenshot                         |Takes a screenshot                                                                                                         |File Path and File Name                 |
 Wait                                    |Wait a specified time in seconds                                                                                           |5                                       |
@@ -70,8 +72,9 @@ Simple rule to remember, if you are interacting with an element, you must provid
 Selector for that element.
 If you are attempting to compare a value, you must provide the Expected value in the Expected column.
 The default value for comparing the URL after navigation is current_url.
-
+==================================|================|=================================|======================================|==============================|======|=================================================================|
 Command                           |Selector_type   |Selector                         |Text or URL                           |Expected                      |Actual|Description (50 characters or less for best presentation results)|
+----------------------------------|----------------|---------------------------------|--------------------------------------|------------------------------|------|-----------------------------------------------------------------|
 Print Step Description            |                |                                 |========[ Start MySite Test ]=======  |                              |      |Print start of test to run                                       |
 Navigate                          |                |                                 |https://www.mycoolsite.com/en-us      |current_url                   |      |Navigate to URL & check that Navigate URL matches current url    |
 Wait                              |                |                                 |3                                     |                              |      |Wait a specified time in seconds                                 |
